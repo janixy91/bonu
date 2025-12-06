@@ -1,0 +1,32 @@
+.business-detail-container {
+  padding: 1rem;
+}
+
+.business-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.business-header h2 {
+  color: var(--ion-color-dark);
+  margin: 1rem 0 0.5rem;
+}
+
+.business-header p {
+  color: var(--ion-color-medium);
+}
+
+.add-card-button,
+.view-card-button {
+  margin-top: 1.5rem;
+  height: 50px;
+}
+
+.add-card-button {
+  --background: var(--ion-color-primary);
+}
+
+.view-card-button {
+  --background: var(--ion-color-secondary);
+}
+

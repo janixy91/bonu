@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Fondo circular -->
+  <circle cx="100" cy="100" r="90" fill="#8B6F47" opacity="0.2"/>
+  
+  <!-- Tarjeta principal -->
+  <rect x="40" y="60" width="120" height="80" rx="8" fill="#8B6F47"/>
+  
+  <!-- Sellos en la tarjeta -->
+  <circle cx="60" cy="85" r="10" fill="#6B8E5A"/>
+  <circle cx="90" cy="85" r="10" fill="#6B8E5A"/>
+  <circle cx="120" cy="85" r="10" fill="#6B8E5A"/>
+  <circle cx="150" cy="85" r="10" fill="white" opacity="0.3"/>
+  
+  <circle cx="60" cy="115" r="10" fill="#6B8E5A"/>
+  <circle cx="90" cy="115" r="10" fill="#6B8E5A"/>
+  <circle cx="120" cy="115" r="10" fill="white" opacity="0.3"/>
+  <circle cx="150" cy="115" r="10" fill="white" opacity="0.3"/>
+  
+  <!-- Texto BONU estilizado -->
+  <text x="100" y="160" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#8B6F47" text-anchor="middle">BONU</text>
+</svg>
+

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Tarjeta vacía -->
+  <rect x="20" y="40" width="160" height="100" rx="8" fill="none" stroke="#8B6F47" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+  
+  <!-- Líneas de sellos vacíos -->
+  <circle cx="50" cy="70" r="8" fill="none" stroke="#8B6F47" stroke-width="2" opacity="0.3"/>
+  <circle cx="80" cy="70" r="8" fill="none" stroke="#8B6F47" stroke-width="2" opacity="0.3"/>
+  <circle cx="110" cy="70" r="8" fill="none" stroke="#8B6F47" stroke-width="2" opacity="0.3"/>
+  <circle cx="140" cy="70" r="8" fill="none" stroke="#8B6F47" stroke-width="2" opacity="0.3"/>
+  
+  <circle cx="50" cy="100" r="8" fill="none" stroke="#8B6F47" stroke-width="2" opacity="0.3"/>
+  <circle cx="80" cy="100" r="8" fill="none" stroke="#8B6F47" stroke-width="2" opacity="0.3"/>
+  <circle cx="110" cy="100" r="8" fill="none" stroke="#8B6F47" stroke-width="2" opacity="0.3"/>
+  <circle cx="140" cy="100" r="8" fill="none" stroke="#8B6F47" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Icono de tarjeta adicional -->
+  <rect x="30" y="150" width="40" height="30" rx="4" fill="none" stroke="#6B8E5A" stroke-width="2" stroke-dasharray="3,3" opacity="0.4"/>
+  <rect x="80" y="150" width="40" height="30" rx="4" fill="none" stroke="#6B8E5A" stroke-width="2" stroke-dasharray="3,3" opacity="0.4"/>
+  <rect x="130" y="150" width="40" height="30" rx="4" fill="none" stroke="#6B8E5A" stroke-width="2" stroke-dasharray="3,3" opacity="0.4"/>
+</svg>
+

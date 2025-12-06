@@ -1,0 +1,53 @@
+.dashboard-container {
+  padding: 1rem;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 3rem;
+}
+
+.loading-container p {
+  margin-top: 1rem;
+  color: #666;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #8B6F47;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #e8f5e9;
+  border-radius: 8px;
+}
+
+.submit-button {
+  margin-top: 1.5rem;
+  --background: #8B6F47;
+  --background-activated: #6B8E5A;
+  height: 50px;
+  font-weight: bold;
+}
+
+.generate-codes-button {
+  margin-bottom: 1rem;
+  --border-color: #8B6F47;
+  --color: #8B6F47;
+}
+
+.logout-button {
+  --color: white;
+  color: white;
+  font-weight: 500;
+}
+

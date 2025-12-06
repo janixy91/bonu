@@ -1,0 +1,71 @@
+.show-code-content {
+  --background: linear-gradient(135deg, #8B6F47 0%, #6B8E5A 100%);
+}
+
+.code-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 2rem;
+}
+
+.code-display {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.code-number {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #8B6F47;
+  letter-spacing: 0.5rem;
+  margin: 1rem 0;
+  font-family: 'Courier New', monospace;
+}
+
+.code-label {
+  font-size: 1.1rem;
+  color: #666;
+  margin-top: 1rem;
+}
+
+.countdown-container {
+  margin-top: 2rem;
+}
+
+.countdown-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.countdown-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #8B6F47 0%, #6B8E5A 100%);
+  transition: width 1s linear;
+  border-radius: 4px;
+}
+
+.countdown-text {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-container p,
+.error-container p {
+  margin-top: 1rem;
+  color: #666;
+}
+
