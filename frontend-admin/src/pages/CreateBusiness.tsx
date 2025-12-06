@@ -82,7 +82,6 @@ const CreateBusiness: React.FC = () => {
       });
 
       // Always show success modal
-      console.log('Response from createBusiness:', response); // Debug
       setSuccessData({
         ownerEmail: response.ownerEmail || formData.ownerEmail,
         temporaryPassword: response.temporaryPassword,
