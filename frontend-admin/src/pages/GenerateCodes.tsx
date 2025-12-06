@@ -22,7 +22,7 @@ import {
 } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { downloadOutline, addOutline, refreshOutline } from 'ionicons/icons';
+import { downloadOutline, addOutline, refreshOutline, closeOutline } from 'ionicons/icons';
 import { useAuthStore } from '../store/authStore';
 import { businessOwnerService, codeService } from '../services/api.service';
 import jsPDF from 'jspdf';
@@ -32,6 +32,11 @@ interface Code {
   id: string;
   code: string;
   benefitName: string;
+  tarjetaId?: string;
+  tarjeta?: {
+    nombre?: string;
+    valorRecompensa?: string;
+  };
   expirationDate: string;
   used: boolean;
   usedAt: string | null;
@@ -40,12 +45,13 @@ interface Code {
 
 const GenerateCodes: React.FC = () => {
   const [business, setBusiness] = useState<any>(null);
+  const [tarjetas, setTarjetas] = useState<any[]>([]);
   const [codes, setCodes] = useState<Code[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
-    benefitName: '',
-    expirationDate: '',
+    tarjetaId: '',
     count: '10',
   });
   const [stats, setStats] = useState({ total: 0, used: 0, unused: 0 });
@@ -61,6 +67,10 @@ const GenerateCodes: React.FC = () => {
       setLoading(true);
       const businessResponse = await businessOwnerService.getMyBusiness();
       setBusiness(businessResponse.business);
+
+      // Load tarjetas
+      const tarjetasResponse = await businessOwnerService.getTarjetas();
+      setTarjetas(tarjetasResponse.tarjetas || []);
 
       if (businessResponse.business?._id) {
         await loadCodes(businessResponse.business._id);
@@ -88,23 +98,22 @@ const GenerateCodes: React.FC = () => {
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!business?._id) return;
+    if (!business?._id || !formData.tarjetaId) return;
 
     try {
       setGenerating(true);
       const response = await codeService.generateCodes({
         businessId: business._id,
-        benefitName: formData.benefitName,
-        expirationDate: formData.expirationDate,
+        tarjetaId: formData.tarjetaId,
         count: parseInt(formData.count),
       });
 
-      // Reset form
+      // Reset form and hide it
       setFormData({
-        benefitName: '',
-        expirationDate: '',
+        tarjetaId: '',
         count: '10',
       });
+      setShowForm(false);
 
       // Reload codes
       await loadCodes(business._id);
@@ -247,11 +256,6 @@ const GenerateCodes: React.FC = () => {
     );
   }
 
-  // Set default expiration date to 30 days from now
-  const defaultExpirationDate = new Date();
-  defaultExpirationDate.setDate(defaultExpirationDate.getDate() + 30);
-  const defaultDateString = defaultExpirationDate.toISOString().split('T')[0];
-
   return (
     <IonPage>
       <IonHeader>
@@ -286,28 +290,61 @@ const GenerateCodes: React.FC = () => {
           </IonCard>
 
           {/* Generate Form */}
-          <IonCard>
-            <IonCardContent>
-              <h2 className="section-title">Generar Nuevos Códigos</h2>
-              <form onSubmit={handleGenerate}>
+          {!showForm ? (
+            <IonCard>
+              <IonCardContent>
+                <IonButton
+                  expand="block"
+                  onClick={() => setShowForm(true)}
+                  className="generate-button"
+                >
+                  <IonIcon icon={addOutline} slot="start" />
+                  Generar Nuevos Códigos
+                </IonButton>
+              </IonCardContent>
+            </IonCard>
+          ) : (
+            <IonCard>
+              <IonCardContent>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <h2 className="section-title">Generar Nuevos Códigos</h2>
+                  <IonButton
+                    fill="clear"
+                    size="small"
+                    onClick={() => {
+                      setShowForm(false);
+                      setFormData({
+                        tarjetaId: '',
+                        count: '10',
+                      });
+                    }}
+                  >
+                    <IonIcon icon={closeOutline} slot="start" />
+                    Cancelar
+                  </IonButton>
+                </div>
+                <form onSubmit={handleGenerate}>
                 <IonItem>
-                  <IonLabel position="stacked">Nombre del Beneficio *</IonLabel>
-                  <IonInput
-                    value={formData.benefitName}
-                    onIonInput={(e) => setFormData({ ...formData, benefitName: e.detail.value! })}
-                    placeholder="Ej: Desayuno completo"
+                  <IonLabel position="stacked">Tarjeta *</IonLabel>
+                  <IonSelect
+                    value={formData.tarjetaId}
+                    onIonChange={(e) => setFormData({ ...formData, tarjetaId: e.detail.value! })}
+                    placeholder="Selecciona una tarjeta"
                     required
-                  />
-                </IonItem>
-
-                <IonItem>
-                  <IonLabel position="stacked">Fecha de Expiración *</IonLabel>
-                  <IonInput
-                    type="date"
-                    value={formData.expirationDate || defaultDateString}
-                    onIonInput={(e) => setFormData({ ...formData, expirationDate: e.detail.value! })}
-                    required
-                  />
+                  >
+                    {tarjetas
+                      .filter((tarjeta) => tarjeta.estado === 'activa' || tarjeta.active)
+                      .map((tarjeta) => (
+                        <IonSelectOption key={tarjeta._id || tarjeta.id} value={tarjeta._id || tarjeta.id}>
+                          {tarjeta.nombre || tarjeta.title} - {tarjeta.valorRecompensa || tarjeta.rewardText}
+                        </IonSelectOption>
+                      ))}
+                  </IonSelect>
+                  {tarjetas.filter((t) => t.estado === 'activa' || t.active).length === 0 && (
+                    <IonText color="danger" slot="helper">
+                      No hay tarjetas activas. Crea una tarjeta primero.
+                    </IonText>
+                  )}
                 </IonItem>
 
                 <IonItem>
@@ -328,7 +365,7 @@ const GenerateCodes: React.FC = () => {
                 <IonButton
                   expand="block"
                   type="submit"
-                  disabled={generating}
+                  disabled={generating || !formData.tarjetaId}
                   className="generate-button"
                 >
                   {generating ? (
@@ -346,6 +383,7 @@ const GenerateCodes: React.FC = () => {
               </form>
             </IonCardContent>
           </IonCard>
+          )}
 
           {/* Export Buttons */}
           {codes.length > 0 && (
@@ -386,7 +424,10 @@ const GenerateCodes: React.FC = () => {
                             {code.used ? 'Usado' : 'Disponible'}
                           </IonBadge>
                         </h2>
-                        <p>{code.benefitName}</p>
+                        <p>{code.tarjeta?.nombre || code.benefitName}</p>
+                        {code.tarjeta?.valorRecompensa && (
+                          <p className="code-reward">{code.tarjeta.valorRecompensa}</p>
+                        )}
                         <p className="code-meta">
                           Expira: {formatDate(code.expirationDate)}
                           {code.used && code.usedAt && (

@@ -19,7 +19,7 @@
 }
 
 .business-info-card {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .business-info-header {
@@ -71,6 +71,23 @@
   text-decoration: none;
 }
 
+.logo-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.business-logo {
+  max-width: 200px;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .form-actions {
   display: flex;
   gap: 1rem;
@@ -113,6 +130,19 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+}
+
+.card-create-form {
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+  border-top: 2px solid #8B6F47;
+  border-bottom: 2px solid #8B6F47;
+}
+
+.card-create-form h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #8B6F47;
 }
 
 .cards-list {
@@ -178,10 +208,30 @@
   opacity: 0.6 !important;
 }
 
-.card-actions {
-  margin-top: 1rem;
+.card-header-actions {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-edit-form {
+  padding: 0.5rem 0;
+}
+
+.card-edit-form h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #8B6F47;
+}
+
+.card-edit-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.card-edit-actions ion-button {
+  flex: 1;
 }
 
 .empty-message {

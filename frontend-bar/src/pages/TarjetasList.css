@@ -1,0 +1,81 @@
+.tarjetas-container {
+  padding: 1rem;
+}
+
+.header-actions {
+  margin-bottom: 1rem;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  min-height: 50vh;
+}
+
+.loading-container p {
+  margin-top: 1rem;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--ion-color-medium);
+  padding: 2rem;
+  font-style: italic;
+}
+
+.tarjetas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tarjeta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.tarjeta-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #8B6F47;
+  font-size: 1.1rem;
+}
+
+.tarjeta-description {
+  color: var(--ion-color-medium);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.active-badge,
+.inactive-badge {
+  font-size: 0.9rem !important;
+  font-weight: bold !important;
+  padding: 0.4rem 0.8rem !important;
+}
+
+.active-badge {
+  --background: var(--ion-color-success) !important;
+  --color: white !important;
+}
+
+.inactive-badge {
+  --background: var(--ion-color-danger) !important;
+  --color: white !important;
+}
+
+.tarjeta-details {
+  margin-top: 1rem;
+}
+
+.tarjeta-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+

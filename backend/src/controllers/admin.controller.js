@@ -120,13 +120,22 @@ export const createBusiness = async (req, res) => {
     await business.save();
 
     // Create initial stamp card (required)
+    const tipo = firstCard.tipo || (firstCard.totalStamps === null || firstCard.totalStamps === undefined ? 'ilimitada' : 'limitada');
     const initialCard = new PromoCard({
       businessId: business._id,
-      title: firstCard.title || 'Tarjeta de Sellos',
-      description: firstCard.description || '',
+      nombre: firstCard.title || firstCard.nombre || 'Tarjeta de Sellos',
+      descripcion: firstCard.description || firstCard.descripcion || '',
+      tipo: tipo,
+      limiteTotal: tipo === 'limitada' ? (firstCard.limiteTotal || firstCard.totalStamps) : null,
+      limiteActual: tipo === 'limitada' ? (firstCard.limiteTotal || firstCard.totalStamps) : null,
+      valorRecompensa: firstCard.rewardText || firstCard.valorRecompensa || '',
+      estado: 'activa',
+      // Campos legacy para compatibilidad
+      title: firstCard.title || firstCard.nombre || 'Tarjeta de Sellos',
+      description: firstCard.description || firstCard.descripcion || '',
       type: 'stamp',
-      totalStamps: firstCard.totalStamps,
-      rewardText: firstCard.rewardText,
+      totalStamps: firstCard.totalStamps || 10,
+      rewardText: firstCard.rewardText || firstCard.valorRecompensa || '',
       active: true,
       isDeleted: false,
     });

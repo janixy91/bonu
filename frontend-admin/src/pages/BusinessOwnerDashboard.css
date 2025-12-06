@@ -46,8 +46,25 @@
 }
 
 .logout-button {
-  --color: white;
-  color: white;
+  --color: white !important;
+  color: white !important;
   font-weight: 500;
+  margin-right: 0.5rem;
+  --background: transparent;
+  --background-activated: rgba(255, 255, 255, 0.2);
+  opacity: 1 !important;
+}
+
+.logout-button ion-icon {
+  color: white !important;
+  margin-right: 0.25rem;
+}
+
+.logout-button:hover {
+  opacity: 0.8 !important;
+}
+
+.business-title {
+  padding-left: 1rem;
 }
 

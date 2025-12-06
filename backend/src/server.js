@@ -12,6 +12,7 @@ import adminRoutes from './routes/admin.routes.js';
 import businessOwnerRoutes from './routes/business-owner.routes.js';
 import codeRoutes from './routes/code.routes.js';
 import promoCardRoutes from './routes/promoCard.routes.js';
+import clienteRoutes from './routes/cliente.routes.js';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/business-owner', businessOwnerRoutes);
 app.use('/api/codes', codeRoutes);
 app.use('/api/admin/promo-cards', promoCardRoutes);
+app.use('/api/cliente', clienteRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

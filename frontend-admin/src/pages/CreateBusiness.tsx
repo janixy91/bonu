@@ -17,6 +17,8 @@ import {
   IonSpinner,
   IonModal,
   IonIcon,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -34,7 +36,9 @@ const CreateBusiness: React.FC = () => {
     // First card (stamp card)
     cardTitle: 'Tarjeta de Sellos',
     cardDescription: '',
-    totalStamps: '10',
+    cantidadTarjetas: 'ilimitado',
+    cantidadPersonalizada: '',
+    sellosRequeridos: '10',
     rewardText: '',
   });
   const [error, setError] = useState('');
@@ -70,7 +74,9 @@ const CreateBusiness: React.FC = () => {
         firstCard: {
           title: formData.cardTitle,
           description: formData.cardDescription || undefined,
-          totalStamps: Number.parseInt(formData.totalStamps, 10) || 10,
+          totalStamps: Number.parseInt(formData.sellosRequeridos, 10) || 10,
+          tipo: 'ilimitada',
+          limiteTotal: null,
           rewardText: formData.rewardText,
         },
       });
@@ -172,12 +178,13 @@ const CreateBusiness: React.FC = () => {
                   />
                 </IonItem>
 
+
                 <IonItem>
-                  <IonLabel position="stacked">Número de Sellos Requeridos *</IonLabel>
+                  <IonLabel position="stacked">Número de Sellos Requeridos para Canjear *</IonLabel>
                   <IonInput
                     type="number"
-                    value={formData.totalStamps}
-                    onIonInput={(e) => setFormData({ ...formData, totalStamps: e.detail.value! })}
+                    value={formData.sellosRequeridos}
+                    onIonInput={(e) => setFormData({ ...formData, sellosRequeridos: e.detail.value! })}
                     min="1"
                     required
                     placeholder="Ej: 10"
@@ -200,7 +207,7 @@ const CreateBusiness: React.FC = () => {
             <IonButton
               expand="block"
               type="submit"
-              disabled={loading || !formData.name || !formData.ownerEmail || !formData.totalStamps || !formData.rewardText}
+              disabled={loading || !formData.name || !formData.ownerEmail || !formData.sellosRequeridos || !formData.rewardText}
               className="submit-button"
             >
               {loading ? (

@@ -76,3 +76,22 @@ export const stampService = {
   validateCode: (code: string) => apiService.validateStampCode(code),
 };
 
+export const tarjetaService = {
+  getTarjetas: () => apiService.request<{ tarjetas: any[] }>('/business-owner/tarjetas'),
+  getTarjeta: (id: string) => apiService.request<{ tarjeta: any }>(`/business-owner/tarjetas/${id}`),
+  createTarjeta: (data: any) => apiService.request<{ message: string; tarjeta: any }>('/business-owner/tarjetas', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
+  updateTarjeta: (id: string, data: any) => apiService.request<{ message: string; tarjeta: any }>(`/business-owner/tarjetas/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  }),
+  desactivarTarjeta: (id: string) => apiService.request<{ message: string; tarjeta: any }>(`/business-owner/tarjetas/${id}/desactivar`, {
+    method: 'PATCH',
+  }),
+  deleteTarjeta: (id: string) => apiService.request<{ message: string }>(`/business-owner/tarjetas/${id}`, {
+    method: 'DELETE',
+  }),
+};
+

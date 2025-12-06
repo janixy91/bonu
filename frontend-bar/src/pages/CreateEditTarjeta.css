@@ -1,0 +1,32 @@
+.form-container {
+  padding: 1rem;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  min-height: 50vh;
+}
+
+.loading-container p {
+  margin-top: 1rem;
+}
+
+.error-message {
+  display: block;
+  text-align: center;
+  margin: 1rem 0;
+  padding: 0.5rem;
+}
+
+.submit-button {
+  margin-top: 1.5rem;
+  --background: #8B6F47;
+  --background-activated: #6B8E5A;
+  height: 50px;
+  font-weight: bold;
+}
+

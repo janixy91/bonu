@@ -1,5 +1,6 @@
 import Code from '../models/Code.model.js';
 import Business from '../models/Business.model.js';
+import PromoCard from '../models/PromoCard.model.js';
 import { generateUniqueCode } from '../utils/code.utils.js';
 
 /**
@@ -63,12 +64,16 @@ export const redeemCode = async (req, res) => {
  */
 export const generateCodes = async (req, res) => {
   try {
-    const { businessId, benefitName, expirationDate, count } = req.body;
+    const { businessId, tarjetaId, benefitName, expirationDate, count } = req.body;
     const userId = req.user._id;
 
     // Validate required fields
-    if (!businessId || !benefitName || !expirationDate || !count) {
-      return res.status(400).json({ error: 'Todos los campos son requeridos' });
+    if (!businessId || !count) {
+      return res.status(400).json({ error: 'businessId y count son requeridos' });
+    }
+
+    if (!tarjetaId && !benefitName) {
+      return res.status(400).json({ error: 'Debe proporcionar tarjetaId o benefitName' });
     }
 
     // Verify business exists and user owns it
@@ -88,10 +93,36 @@ export const generateCodes = async (req, res) => {
       return res.status(400).json({ error: 'El número de códigos debe estar entre 1 y 100' });
     }
 
-    // Validate expiration date
-    const expiration = new Date(expirationDate);
-    if (isNaN(expiration.getTime())) {
-      return res.status(400).json({ error: 'Fecha de expiración inválida' });
+    // Set expiration date (default to 1 year from now if not provided)
+    let expiration;
+    if (expirationDate) {
+      expiration = new Date(expirationDate);
+      if (isNaN(expiration.getTime())) {
+        return res.status(400).json({ error: 'Fecha de expiración inválida' });
+      }
+    } else {
+      // Default to 1 year from now
+      expiration = new Date();
+      expiration.setFullYear(expiration.getFullYear() + 1);
+    }
+
+    // If tarjetaId is provided, validate it belongs to the business
+    let tarjeta = null;
+    let finalBenefitName = benefitName;
+    
+    if (tarjetaId) {
+      tarjeta = await PromoCard.findOne({
+        _id: tarjetaId,
+        businessId: business._id,
+        estado: { $ne: 'eliminada' },
+      });
+
+      if (!tarjeta) {
+        return res.status(404).json({ error: 'Tarjeta no encontrada o no pertenece a este negocio' });
+      }
+
+      // Use tarjeta's reward text as benefit name
+      finalBenefitName = tarjeta.valorRecompensa || tarjeta.rewardText || tarjeta.nombre || tarjeta.title;
     }
 
     // Generate codes
@@ -101,7 +132,8 @@ export const generateCodes = async (req, res) => {
       codes.push({
         code,
         businessId: business._id,
-        benefitName,
+        tarjetaId: tarjetaId || null,
+        benefitName: finalBenefitName,
         expirationDate: expiration,
         used: false,
         usedAt: null,
@@ -148,8 +180,9 @@ export const getBusinessCodes = async (req, res) => {
 
     // Get codes
     const codes = await Code.find({ businessId })
+      .populate('tarjetaId', 'nombre valorRecompensa')
       .sort({ createdAt: -1 })
-      .select('id code benefitName expirationDate used usedAt createdAt');
+      .select('id code benefitName tarjetaId expirationDate used usedAt createdAt');
 
     res.json({
       codes,

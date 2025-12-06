@@ -66,7 +66,7 @@ const AdminDashboard: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle>Panel de Administración</IonTitle>
+          <IonTitle className="dashboard-title">Panel de Administración</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={handleLogout} className="logout-button">
               <IonIcon icon={logOut} slot="start" />

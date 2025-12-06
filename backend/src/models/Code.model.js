@@ -24,8 +24,13 @@ const codeSchema = new mongoose.Schema(
     },
     benefitName: {
       type: String,
-      required: true,
+      required: false, // Made optional for backward compatibility
       trim: true,
+    },
+    tarjetaId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'PromoCard',
+      required: false,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -34,7 +39,7 @@ const codeSchema = new mongoose.Schema(
     },
     expirationDate: {
       type: Date,
-      required: true,
+      required: false, // Made optional
     },
     used: {
       type: Boolean,

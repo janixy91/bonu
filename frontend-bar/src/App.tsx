@@ -4,6 +4,8 @@ import { Redirect, Route } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
 import Login from './pages/Login';
 import ValidateCode from './pages/ValidateCode';
+import TarjetasList from './pages/TarjetasList';
+import CreateEditTarjeta from './pages/CreateEditTarjeta';
 
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
@@ -31,8 +33,17 @@ function App() {
           <Route exact path="/validate">
             {!isAuthenticated ? <Redirect to="/login" /> : <ValidateCode />}
           </Route>
+          <Route exact path="/tarjetas">
+            {!isAuthenticated ? <Redirect to="/login" /> : <TarjetasList />}
+          </Route>
+          <Route exact path="/tarjetas/nueva">
+            {!isAuthenticated ? <Redirect to="/login" /> : <CreateEditTarjeta />}
+          </Route>
+          <Route exact path="/tarjetas/:id/editar">
+            {!isAuthenticated ? <Redirect to="/login" /> : <CreateEditTarjeta />}
+          </Route>
           <Route exact path="/">
-            <Redirect to={isAuthenticated ? '/validate' : '/login'} />
+            <Redirect to={isAuthenticated ? '/tarjetas' : '/login'} />
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>

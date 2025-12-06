@@ -10,6 +10,8 @@ import CardDetail from './pages/CardDetail';
 import BusinessDetail from './pages/BusinessDetail';
 import ValidateCode from './pages/ValidateCode';
 import RedeemCode from './pages/RedeemCode';
+import TarjetasDisponibles from './pages/TarjetasDisponibles';
+import MisTarjetas from './pages/MisTarjetas';
 
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
@@ -54,6 +56,12 @@ function App() {
           </Route>
           <Route exact path="/redeem-code">
             {!isAuthenticated ? <Redirect to="/login" /> : <RedeemCode />}
+          </Route>
+          <Route exact path="/tarjetas-disponibles">
+            {!isAuthenticated ? <Redirect to="/login" /> : <TarjetasDisponibles />}
+          </Route>
+          <Route exact path="/mis-tarjetas">
+            {!isAuthenticated ? <Redirect to="/login" /> : <MisTarjetas />}
           </Route>
           <Route exact path="/">
             <Redirect to={hasCompletedOnboarding ? '/tabs/home' : '/onboarding'} />

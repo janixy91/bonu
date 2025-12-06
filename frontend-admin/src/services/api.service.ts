@@ -108,6 +108,43 @@ class ApiService {
     });
   }
 
+  async createPromoCard(data: {
+    businessId: string;
+    nombre: string;
+    descripcion?: string;
+    tipo: string;
+    limiteTotal?: number | null;
+    valorRecompensa: string;
+  }) {
+    return this.request<{ message: string; promoCard: any }>('/admin/promo-cards', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getPromoCard(cardId: string) {
+    return this.request<{ promoCard: any }>(`/admin/promo-cards/${cardId}`);
+  }
+
+  async updatePromoCard(cardId: string, data: {
+    nombre?: string;
+    descripcion?: string;
+    tipo?: string;
+    limiteTotal?: number | null;
+    valorRecompensa?: string;
+  }) {
+    return this.request<{ message: string; promoCard: any }>(`/admin/promo-cards/${cardId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deletePromoCard(cardId: string) {
+    return this.request<{ message: string }>(`/admin/promo-cards/${cardId}`, {
+      method: 'DELETE',
+    });
+  }
+
   async togglePromoCardActive(cardId: string, active: boolean) {
     return this.request<{ message: string; promoCard: any }>(`/admin/promo-cards/${cardId}/activate`, {
       method: 'PATCH',
@@ -184,12 +221,33 @@ export const adminService = {
   getBusiness: (id: string) => apiService.getBusiness(id),
   updateBusiness: (id: string, data: any) => apiService.updateBusiness(id, data),
   deleteBusiness: (id: string) => apiService.deleteBusiness(id),
+  createPromoCard: (data: any) => apiService.createPromoCard(data),
+  getPromoCard: (cardId: string) => apiService.getPromoCard(cardId),
+  updatePromoCard: (cardId: string, data: any) => apiService.updatePromoCard(cardId, data),
+  deletePromoCard: (cardId: string) => apiService.deletePromoCard(cardId),
   togglePromoCardActive: (cardId: string, active: boolean) => apiService.togglePromoCardActive(cardId, active),
 };
 
 export const businessOwnerService = {
   getMyBusiness: () => apiService.getMyBusiness(),
   updateMyBusiness: (data: any) => apiService.updateMyBusiness(data),
+  getTarjetas: () => apiService.request<{ tarjetas: any[] }>('/business-owner/tarjetas'),
+  getTarjeta: (id: string) => apiService.request<{ tarjeta: any }>(`/business-owner/tarjetas/${id}`),
+  createTarjeta: (data: any) => apiService.request<{ message: string; tarjeta: any }>('/business-owner/tarjetas', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
+  updateTarjeta: (id: string, data: any) => apiService.request<{ message: string; tarjeta: any }>(`/business-owner/tarjetas/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  }),
+  deleteTarjeta: (id: string) => apiService.request<{ message: string }>(`/business-owner/tarjetas/${id}`, {
+    method: 'DELETE',
+  }),
+  desactivarTarjeta: (id: string, active?: boolean) => apiService.request<{ message: string; tarjeta: any }>(`/business-owner/tarjetas/${id}/desactivar`, {
+    method: 'PATCH',
+    body: JSON.stringify(active !== undefined ? { active } : {}),
+  }),
 };
 
 export const codeService = {

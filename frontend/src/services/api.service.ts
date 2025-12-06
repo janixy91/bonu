@@ -223,3 +223,14 @@ export const codeService = {
   redeemCode: (code: string) => apiService.redeemCode(code),
 };
 
+export const tarjetaClienteService = {
+  getTarjetasDisponibles: () => apiService.request<{ tarjetas: any[] }>('/cliente/tarjetas-disponibles'),
+  anadirTarjeta: (id: string) => apiService.request<{ message: string; tarjeta: any }>(`/cliente/tarjetas/${id}/anadir`, {
+    method: 'POST',
+  }),
+  getMisTarjetas: () => apiService.request<{ tarjetas: any[] }>('/cliente/mis-tarjetas'),
+  canjearTarjeta: (id: string) => apiService.request<{ message: string; tarjeta: any }>(`/cliente/tarjetas/${id}/canjear`, {
+    method: 'PATCH',
+  }),
+};
+
