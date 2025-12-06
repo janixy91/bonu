@@ -33,7 +33,7 @@ app.use('/api/stamps', stampRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/business-owner', businessOwnerRoutes);
 app.use('/api/codes', codeRoutes);
-app.use('/api/promo-cards', promoCardRoutes);
+app.use('/api/admin/promo-cards', promoCardRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

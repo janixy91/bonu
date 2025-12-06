@@ -22,11 +22,6 @@ const codeSchema = new mongoose.Schema(
       ref: 'Business',
       required: true,
     },
-    promoCardId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'PromoCard',
-      default: null,
-    },
     benefitName: {
       type: String,
       required: true,
@@ -60,7 +55,6 @@ codeSchema.index({ code: 1 });
 codeSchema.index({ businessId: 1 });
 codeSchema.index({ userId: 1 });
 codeSchema.index({ id: 1 });
-codeSchema.index({ promoCardId: 1 });
 
 export default mongoose.model('Code', codeSchema);
 

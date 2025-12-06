@@ -23,11 +23,11 @@ export const getMyBusiness = async (req, res) => {
 /**
  * PATCH /business-owner/my-business
  * Update current user's business configuration
- * Body: { name?, description?, logoUrl? }
+ * Body: { name?, description?, logoUrl?, totalStamps?, rewardText? }
  */
 export const updateMyBusiness = async (req, res) => {
   try {
-    const { name, description, logoUrl } = req.body;
+    const { name, description, logoUrl, totalStamps, rewardText } = req.body;
 
     const business = await Business.findOne({ ownerId: req.user._id });
     
@@ -39,6 +39,13 @@ export const updateMyBusiness = async (req, res) => {
     if (name !== undefined) business.name = name;
     if (description !== undefined) business.description = description;
     if (logoUrl !== undefined) business.logoUrl = logoUrl;
+    if (totalStamps !== undefined) {
+      if (totalStamps < 1) {
+        return res.status(400).json({ error: 'totalStamps must be at least 1' });
+      }
+      business.totalStamps = totalStamps;
+    }
+    if (rewardText !== undefined) business.rewardText = rewardText;
 
     await business.save();
 

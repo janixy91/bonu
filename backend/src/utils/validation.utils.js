@@ -15,6 +15,8 @@ export const businessSchema = z.object({
   name: z.string().min(2, 'Business name must be at least 2 characters'),
   description: z.string().optional(),
   logoUrl: z.string().url().optional().or(z.literal('')),
+  totalStamps: z.number().int().positive().default(10),
+  rewardText: z.string().min(1, 'Reward text is required'),
 });
 
 export const redeemCodeSchema = z.object({

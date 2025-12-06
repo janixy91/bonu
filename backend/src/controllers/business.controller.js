@@ -22,30 +22,8 @@ export const createBusiness = async (req, res) => {
 
 export const listBusinesses = async (req, res) => {
   try {
-    const businesses = await Business.find()
-      .populate({
-        path: 'ownerId',
-        select: 'name email',
-        options: { lean: true }
-      })
-      .sort({ createdAt: -1 })
-      .lean();
-    
-    console.log(`📊 Found ${businesses.length} businesses`);
-    
-    // Log first business to verify fields
-    if (businesses.length > 0) {
-      console.log('📊 Sample business:', {
-        name: businesses[0].name,
-        description: businesses[0].description,
-        hasDescription: !!businesses[0].description,
-      });
-    }
-    
-    // Ensure businesses array is always returned
-    const businessesList = businesses || [];
-    
-    res.json({ businesses: businessesList });
+    const businesses = await Business.find().populate('ownerId', 'name email');
+    res.json({ businesses });
   } catch (error) {
     console.error('List businesses error:', error);
     res.status(500).json({ error: 'Failed to list businesses' });

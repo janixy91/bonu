@@ -79,7 +79,7 @@ const AdminDashboard: React.FC = () => {
         <div className="dashboard-container">
           <div className="dashboard-header">
             <h2>Negocios Registrados</h2>
-            <IonButton onClick={() => history.push('/admin/create-business')}>
+                    <IonButton onClick={() => history.push('/admin/create-business')}>
               <IonIcon icon={add} slot="start" />
               Nuevo Negocio
             </IonButton>
@@ -105,22 +105,12 @@ const AdminDashboard: React.FC = () => {
                       <div className="business-info">
                         <h3>{business.name}</h3>
                         <p className="business-owner">
-                          Propietario: {business.ownerId?.name || 'N/A'} ({business.ownerId?.email || 'N/A'})
+                          Propietario: ({business.ownerId?.email || 'N/A'})
                         </p>
                         {business.description && (
                           <p className="business-description">{business.description}</p>
                         )}
                       </div>
-                      <IonBadge color="primary">{business.totalStamps} sellos</IonBadge>
-                    </div>
-
-                    <div className="business-details">
-                      <IonItem>
-                        <IonLabel>
-                          <h4>Recompensa</h4>
-                          <p>{business.rewardText}</p>
-                        </IonLabel>
-                      </IonItem>
                     </div>
 
                     <div className="business-actions">

@@ -16,7 +16,7 @@ import {
   IonButtons,
 } from '@ionic/react';
 import { useState } from 'react';
-import { checkmarkCircle, closeCircle, logOut, ticketOutline } from 'ionicons/icons';
+import { checkmarkCircle, closeCircle, logOut } from 'ionicons/icons';
 import { stampService } from '../services/api.service';
 import { useAuthStore } from '../store/authStore';
 import { useHistory } from 'react-router-dom';
@@ -136,20 +136,6 @@ const ValidateCode: React.FC = () => {
                 ) : (
                   'Validar consumición'
                 )}
-              </IonButton>
-            </IonCardContent>
-          </IonCard>
-
-          <IonCard>
-            <IonCardContent>
-              <IonButton
-                expand="block"
-                fill="outline"
-                onClick={() => history.push('/promo-cards')}
-                className="promo-cards-button"
-              >
-                <IonIcon icon={ticketOutline} slot="start" />
-                Gestionar Tarjetas Promocionales
               </IonButton>
             </IonCardContent>
           </IonCard>

@@ -1,6 +1,5 @@
 import Code from '../models/Code.model.js';
 import Business from '../models/Business.model.js';
-import PromoCard from '../models/PromoCard.model.js';
 import { generateUniqueCode } from '../utils/code.utils.js';
 
 /**
@@ -44,19 +43,6 @@ export const redeemCode = async (req, res) => {
     codeDoc.usedAt = now;
     await codeDoc.save();
 
-    // If code is associated with a promo card, decrement remaining
-    if (codeDoc.promoCardId) {
-      try {
-        const promoCard = await PromoCard.findById(codeDoc.promoCardId);
-        if (promoCard && promoCard.type === 'limited') {
-          await promoCard.decrementRemaining();
-        }
-      } catch (promoCardError) {
-        console.error('Error updating promo card remaining:', promoCardError);
-        // Don't fail the redemption if promo card update fails
-      }
-    }
-
     // Return success response with correct format
     res.json({
       status: 'success',
@@ -73,11 +59,11 @@ export const redeemCode = async (req, res) => {
 /**
  * POST /codes/generate
  * Generate new codes for a business
- * Body: { businessId, benefitName, expirationDate, count, promoCardId? }
+ * Body: { businessId, benefitName, expirationDate, count }
  */
 export const generateCodes = async (req, res) => {
   try {
-    const { businessId, benefitName, expirationDate, count, promoCardId } = req.body;
+    const { businessId, benefitName, expirationDate, count } = req.body;
     const userId = req.user._id;
 
     // Validate required fields
@@ -94,35 +80,6 @@ export const generateCodes = async (req, res) => {
     // Check ownership (business owner or admin)
     if (business.ownerId.toString() !== userId.toString() && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'No autorizado para generar códigos de este negocio' });
-    }
-
-    // If promoCardId is provided, validate it
-    let promoCard = null;
-    if (promoCardId) {
-      promoCard = await PromoCard.findById(promoCardId);
-      if (!promoCard) {
-        return res.status(404).json({ error: 'Tarjeta promocional no encontrada' });
-      }
-
-      // Verify the promo card belongs to the business
-      if (promoCard.businessId.toString() !== businessId) {
-        return res.status(400).json({ error: 'La tarjeta promocional no pertenece a este negocio' });
-      }
-
-      // Check if card is available
-      if (!promoCard.isAvailable()) {
-        return res.status(400).json({ error: 'La tarjeta promocional no está disponible (agotada, inactiva o expirada)' });
-      }
-
-      // For limited cards, check if there's enough remaining
-      if (promoCard.type === 'limited') {
-        const codeCount = parseInt(count);
-        if (promoCard.remaining < codeCount) {
-          return res.status(400).json({ 
-            error: `No hay suficiente stock. Disponible: ${promoCard.remaining}, solicitado: ${codeCount}` 
-          });
-        }
-      }
     }
 
     // Validate count
@@ -144,7 +101,6 @@ export const generateCodes = async (req, res) => {
       codes.push({
         code,
         businessId: business._id,
-        promoCardId: promoCardId || null,
         benefitName,
         expirationDate: expiration,
         used: false,
@@ -162,7 +118,6 @@ export const generateCodes = async (req, res) => {
         code: c.code,
         benefitName: c.benefitName,
         expirationDate: c.expirationDate,
-        promoCardId: c.promoCardId,
       })),
     });
   } catch (error) {

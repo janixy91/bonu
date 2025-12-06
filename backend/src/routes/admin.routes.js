@@ -18,7 +18,7 @@ router.use(requireAdmin);
 router.get('/businesses', getAllBusinesses);
 router.post('/businesses', createBusiness);
 router.get('/businesses/:id', getBusiness);
-router.patch('/businesses/:id', updateBusiness);
+router.put('/businesses/:id', updateBusiness);
 router.delete('/businesses/:id', deleteBusiness);
 
 export default router;

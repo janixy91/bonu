@@ -2,12 +2,95 @@
   padding: 1rem;
 }
 
-.form-title {
-  font-size: 1.5rem;
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  min-height: 50vh;
+}
+
+.loading-container p,
+.error-container {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.business-info-card {
+  margin-bottom: 1rem;
+}
+
+.business-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 1.3rem;
   font-weight: bold;
   color: #8B6F47;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #8B6F47;
+}
+
+.edit-button {
+  --color: #8B6F47;
+  --border-color: #8B6F47;
+}
+
+.business-info-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-label {
+  font-weight: bold;
+  color: #8B6F47;
+  font-size: 0.9rem;
+}
+
+.info-value {
+  color: var(--ion-color-dark);
+  word-break: break-word;
+}
+
+.info-value a {
+  color: var(--ion-color-primary);
+  text-decoration: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.form-actions ion-button {
+  height: 44px;
+  margin: 0;
+  min-width: 140px;
+}
+
+.error-message,
+.success-message {
+  display: block;
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin: 1rem 0;
+  padding: 0.5rem;
 }
 
 .success-message {
@@ -15,17 +98,6 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  background-color: #e8f5e9;
-  border-radius: 8px;
-}
-
-.error-message {
-  display: block;
-  text-align: center;
-  margin: 1rem 0;
-  padding: 0.5rem;
 }
 
 .submit-button {
@@ -36,23 +108,6 @@
   font-weight: bold;
 }
 
-.info-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #8B6F47;
-  margin-bottom: 1rem;
-}
-
-.info-item {
-  margin-bottom: 0.75rem;
-  color: var(--ion-color-dark);
-}
-
-.info-item strong {
-  color: var(--ion-color-primary);
-  margin-right: 0.5rem;
-}
-
 .cards-header {
   display: flex;
   justify-content: space-between;
@@ -60,42 +115,79 @@
   margin-bottom: 1rem;
 }
 
-.create-card-button {
-  --background: var(--ion-color-secondary);
-  --background-activated: var(--ion-color-secondary-shade);
-}
-
-.empty-state {
+.cards-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  text-align: center;
+  gap: 1rem;
 }
 
-.empty-state ion-icon {
-  color: var(--ion-color-medium);
+.promo-card-item {
+  margin: 0;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 1rem;
 }
 
-.empty-state p {
+.card-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #8B6F47;
+  font-size: 1.1rem;
+}
+
+.card-description {
   color: var(--ion-color-medium);
+  font-size: 0.9rem;
+  margin: 0;
 }
 
-.card-meta {
-  font-size: 0.85rem;
-  color: var(--ion-color-medium);
-  margin-top: 0.25rem;
-}
-
-.loading-container {
-  text-align: center;
-  padding: 3rem;
-}
-
-.loading-container p {
+.card-details {
   margin-top: 1rem;
-  color: #666;
+}
+
+.active-badge {
+  font-size: 1rem !important;
+  font-weight: bold !important;
+  padding: 0.5rem 1rem !important;
+  --background: var(--ion-color-success) !important;
+  --color: white !important;
+}
+
+.inactive-badge {
+  font-size: 1rem !important;
+  font-weight: bold !important;
+  padding: 0.5rem 1rem !important;
+  --background: var(--ion-color-danger) !important;
+  --color: white !important;
+}
+
+.clickable-badge {
+  cursor: pointer !important;
+  transition: opacity 0.2s ease !important;
+  user-select: none !important;
+}
+
+.clickable-badge:hover {
+  opacity: 0.8 !important;
+}
+
+.clickable-badge:active {
+  opacity: 0.6 !important;
+}
+
+.card-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--ion-color-medium);
+  padding: 2rem;
+  font-style: italic;
 }
 

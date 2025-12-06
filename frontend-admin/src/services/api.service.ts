@@ -88,17 +88,16 @@ class ApiService {
   }
 
   async getBusiness(id: string) {
-    return this.request<{ business: any }>(`/admin/businesses/${id}`);
+    return this.request<{ business: any; promoCards?: any[] }>(`/admin/businesses/${id}`);
   }
 
   async updateBusiness(id: string, data: {
-    name?: string;
+    name: string;
     description?: string;
     logoUrl?: string;
-    ownerEmail?: string;
   }) {
     return this.request<{ message: string; business: any }>(`/admin/businesses/${id}`, {
-      method: 'PATCH',
+      method: 'PUT',
       body: JSON.stringify(data),
     });
   }
@@ -106,6 +105,13 @@ class ApiService {
   async deleteBusiness(id: string) {
     return this.request<{ message: string }>(`/admin/businesses/${id}`, {
       method: 'DELETE',
+    });
+  }
+
+  async togglePromoCardActive(cardId: string, active: boolean) {
+    return this.request<{ message: string; promoCard: any }>(`/admin/promo-cards/${cardId}/activate`, {
+      method: 'PATCH',
+      body: JSON.stringify({ active }),
     });
   }
 
@@ -178,9 +184,7 @@ export const adminService = {
   getBusiness: (id: string) => apiService.getBusiness(id),
   updateBusiness: (id: string, data: any) => apiService.updateBusiness(id, data),
   deleteBusiness: (id: string) => apiService.deleteBusiness(id),
-  getPromoCards: (businessId: string) => apiService.getPromoCards(businessId),
-  createPromoCard: (data: any) => apiService.createPromoCard(data),
-  getPromoCard: (id: string) => apiService.getPromoCard(id),
+  togglePromoCardActive: (cardId: string, active: boolean) => apiService.togglePromoCardActive(cardId, active),
 };
 
 export const businessOwnerService = {

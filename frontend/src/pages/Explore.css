@@ -15,16 +15,3 @@
   color: var(--ion-color-medium);
 }
 
-.business-description {
-  margin-top: 0.25rem;
-  font-size: 0.9rem;
-  color: var(--ion-color-medium);
-  line-height: 1.4;
-}
-
-.business-description.empty {
-  font-style: italic;
-  color: var(--ion-color-medium);
-  opacity: 0.7;
-}
-

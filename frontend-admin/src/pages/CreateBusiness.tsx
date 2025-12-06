@@ -70,7 +70,7 @@ const CreateBusiness: React.FC = () => {
         firstCard: {
           title: formData.cardTitle,
           description: formData.cardDescription || undefined,
-          totalStamps: parseInt(formData.totalStamps) || 10,
+          totalStamps: Number.parseInt(formData.totalStamps, 10) || 10,
           rewardText: formData.rewardText,
         },
       });
@@ -101,17 +101,16 @@ const CreateBusiness: React.FC = () => {
       </IonHeader>
       <IonContent>
         <div className="form-container">
-          <IonCard>
-            <IonCardContent>
-              <h2 className="form-title">Registrar Nuevo Negocio</h2>
+          <form onSubmit={handleSubmit}>
+            {error && (
+              <IonText color="danger" className="error-message">
+                {error}
+              </IonText>
+            )}
 
-              {error && (
-                <IonText color="danger" className="error-message">
-                  {error}
-                </IonText>
-              )}
-
-              <form onSubmit={handleSubmit}>
+            {/* Business Info Card */}
+            <IonCard className="form-card">
+              <IonCardContent>
                 {/* Business Info Section */}
                 <h3 className="section-subtitle">Información del Negocio</h3>
                 
@@ -152,8 +151,12 @@ const CreateBusiness: React.FC = () => {
                     placeholder="email@ejemplo.com"
                   />
                 </IonItem>
+              </IonCardContent>
+            </IonCard>
 
-                {/* First Card Section */}
+            {/* First Card Section */}
+            <IonCard className="form-card">
+              <IonCardContent>
                 <h3 className="section-subtitle">Primera Tarjeta de Sellos</h3>
                 <p className="section-description">
                   Crea la tarjeta de sellos inicial para este negocio. Los clientes acumularán sellos en esta tarjeta.
@@ -170,16 +173,6 @@ const CreateBusiness: React.FC = () => {
                 </IonItem>
 
                 <IonItem>
-                  <IonLabel position="stacked">Descripción de la Tarjeta</IonLabel>
-                  <IonTextarea
-                    value={formData.cardDescription}
-                    onIonInput={(e) => setFormData({ ...formData, cardDescription: e.detail.value! })}
-                    rows={2}
-                    placeholder="Descripción opcional de la tarjeta"
-                  />
-                </IonItem>
-
-                <IonItem>
                   <IonLabel position="stacked">Número de Sellos Requeridos *</IonLabel>
                   <IonInput
                     type="number"
@@ -192,34 +185,34 @@ const CreateBusiness: React.FC = () => {
                 </IonItem>
 
                 <IonItem>
-                  <IonLabel position="stacked">Texto de Recompensa *</IonLabel>
+                  <IonLabel position="stacked">Descripción de la promoción *</IonLabel>
                   <IonTextarea
                     value={formData.rewardText}
                     onIonInput={(e) => setFormData({ ...formData, rewardText: e.detail.value! })}
                     rows={2}
                     required
-                    placeholder="Ej: Desayuno gratis"
+                    placeholder="Ej: Sello por cada desayuno, el décimo gratis!"
                   />
                 </IonItem>
+              </IonCardContent>
+            </IonCard>
 
-                <IonButton
-                  expand="block"
-                  type="submit"
-                  disabled={loading || !formData.name || !formData.ownerEmail || !formData.totalStamps || !formData.rewardText}
-                  className="submit-button"
-                >
-                  {loading ? (
-                    <>
-                      <IonSpinner name="crescent" />
-                      Creando...
-                    </>
-                  ) : (
-                    'Crear Negocio y Tarjeta'
-                  )}
-                </IonButton>
-              </form>
-            </IonCardContent>
-          </IonCard>
+            <IonButton
+              expand="block"
+              type="submit"
+              disabled={loading || !formData.name || !formData.ownerEmail || !formData.totalStamps || !formData.rewardText}
+              className="submit-button"
+            >
+              {loading ? (
+                <>
+                  <IonSpinner name="crescent" />
+                  Creando...
+                </>
+              ) : (
+                'Crear Negocio y Tarjeta'
+              )}
+            </IonButton>
+          </form>
 
           {/* Success Modal */}
           <IonModal isOpen={showSuccessModal} onDidDismiss={handleCloseModal}>

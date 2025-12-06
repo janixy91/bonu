@@ -23,7 +23,7 @@ export const getAllBusinesses = async (req, res) => {
 /**
  * POST /admin/businesses
  * Create a new business (admin only)
- * Body: { name, description, logoUrl, ownerEmail, firstCard: { title, description, totalStamps, rewardText } }
+ * Body: { name, description, logoUrl, ownerEmail, firstCard: { title, description?, totalStamps, rewardText } }
  */
 export const createBusiness = async (req, res) => {
   try {
@@ -33,14 +33,15 @@ export const createBusiness = async (req, res) => {
       return res.status(400).json({ error: 'Name and ownerEmail are required' });
     }
 
-    // Validate first card if provided
-    if (firstCard) {
-      if (!firstCard.totalStamps || !firstCard.rewardText) {
-        return res.status(400).json({ error: 'firstCard must include totalStamps and rewardText' });
-      }
-      if (firstCard.totalStamps < 1) {
-        return res.status(400).json({ error: 'totalStamps must be at least 1' });
-      }
+    // Validate first card - it's required
+    if (!firstCard) {
+      return res.status(400).json({ error: 'firstCard is required' });
+    }
+    if (!firstCard.totalStamps || !firstCard.rewardText) {
+      return res.status(400).json({ error: 'firstCard must include totalStamps and rewardText' });
+    }
+    if (firstCard.totalStamps < 1) {
+      return res.status(400).json({ error: 'totalStamps must be at least 1' });
     }
 
     // Normalize email
@@ -115,32 +116,21 @@ export const createBusiness = async (req, res) => {
       logoUrl: logoUrl || undefined,
       ownerId: owner._id,
     });
-    
-    console.log('📝 Creating business:', {
-      name: business.name,
-      description: business.description,
-      hasDescription: !!business.description,
-    });
 
     await business.save();
 
-    // Create initial stamp card if provided
-    let initialCard = null;
-    if (firstCard) {
-      initialCard = new PromoCard({
-        businessId: business._id,
-        title: firstCard.title || 'Tarjeta de Sellos',
-        description: firstCard.description || '',
-        type: 'stamp',
-        totalStamps: firstCard.totalStamps,
-        rewardText: firstCard.rewardText,
-        benefitType: firstCard.rewardText, // Use rewardText as benefitType for stamp cards
-        active: true,
-        soldOut: false,
-        isDeleted: false,
-      });
-      await initialCard.save();
-    }
+    // Create initial stamp card (required)
+    const initialCard = new PromoCard({
+      businessId: business._id,
+      title: firstCard.title || 'Tarjeta de Sellos',
+      description: firstCard.description || '',
+      type: 'stamp',
+      totalStamps: firstCard.totalStamps,
+      rewardText: firstCard.rewardText,
+      active: true,
+      isDeleted: false,
+    });
+    await initialCard.save();
 
     const populatedBusiness = await Business.findById(business._id)
       .populate('ownerId', 'name email role');
@@ -181,7 +171,13 @@ export const getBusiness = async (req, res) => {
       return res.status(404).json({ error: 'Business not found' });
     }
 
-    res.json({ business });
+    // Get all promo cards for this business
+    const promoCards = await PromoCard.find({
+      businessId: business._id,
+      isDeleted: false,
+    }).sort({ createdAt: -1 });
+
+    res.json({ business, promoCards });
   } catch (error) {
     console.error('Get business error:', error);
     res.status(500).json({ error: 'Failed to get business' });
@@ -189,60 +185,32 @@ export const getBusiness = async (req, res) => {
 };
 
 /**
- * PATCH /admin/businesses/:id
+ * PUT /admin/businesses/:id
  * Update a business (admin only)
- * Body: { name?, description?, logoUrl?, totalStamps?, rewardText?, ownerEmail? }
  */
 export const updateBusiness = async (req, res) => {
   try {
-    const { name, description, logoUrl, totalStamps, rewardText, ownerEmail } = req.body;
-    const businessId = req.params.id;
+    const { name, description, logoUrl } = req.body;
 
-    const business = await Business.findById(businessId);
-    
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
+    }
+
+    const business = await Business.findByIdAndUpdate(
+      req.params.id,
+      {
+        name,
+        description: description || undefined,
+        logoUrl: logoUrl || undefined,
+      },
+      { new: true, runValidators: true }
+    ).populate('ownerId', 'name email role');
+
     if (!business) {
       return res.status(404).json({ error: 'Business not found' });
     }
 
-    // Update business fields
-    if (name !== undefined) business.name = name;
-    if (description !== undefined) business.description = description;
-    if (logoUrl !== undefined) business.logoUrl = logoUrl;
-    if (totalStamps !== undefined) {
-      if (totalStamps < 1) {
-        return res.status(400).json({ error: 'totalStamps must be at least 1' });
-      }
-      business.totalStamps = totalStamps;
-    }
-    if (rewardText !== undefined) business.rewardText = rewardText;
-
-    // Update owner if ownerEmail is provided
-    if (ownerEmail) {
-      const normalizedEmail = ownerEmail.toLowerCase().trim();
-      let owner = await User.findOne({ email: normalizedEmail });
-      
-      if (!owner) {
-        return res.status(404).json({ error: 'Owner email not found. Create the user first.' });
-      }
-      
-      // Update owner role if needed
-      if (owner.role === 'customer') {
-        owner.role = 'business_owner';
-        await owner.save();
-      }
-      
-      business.ownerId = owner._id;
-    }
-
-    await business.save();
-
-    const updatedBusiness = await Business.findById(business._id)
-      .populate('ownerId', 'name email role');
-
-    res.json({
-      message: 'Business updated successfully',
-      business: updatedBusiness,
-    });
+    res.json({ message: 'Business updated successfully', business });
   } catch (error) {
     console.error('Update business error:', error);
     res.status(500).json({ error: 'Failed to update business' });

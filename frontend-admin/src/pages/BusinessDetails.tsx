@@ -15,176 +15,117 @@ import {
   IonButtons,
   IonBackButton,
   IonSpinner,
-  IonIcon,
   IonBadge,
-  IonList,
-  IonModal,
-  IonSelect,
-  IonSelectOption,
-  IonDatetimeButton,
-  IonDatetime,
+  IonIcon,
 } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { checkmarkCircle, add, ticketOutline } from 'ionicons/icons';
+import { checkmarkCircle, createOutline, closeOutline } from 'ionicons/icons';
 import { adminService } from '../services/api.service';
 import './BusinessDetails.css';
 
 const BusinessDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [business, setBusiness] = useState<any>(null);
+  const [promoCards, setPromoCards] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
-  const [promoCards, setPromoCards] = useState<any[]>([]);
-  const [loadingCards, setLoadingCards] = useState(false);
-  const [showCreateCardModal, setShowCreateCardModal] = useState(false);
-  const [cardFormData, setCardFormData] = useState({
-    title: '',
-    description: '',
-    type: 'unlimited' as 'unlimited' | 'limited',
-    limit: '',
-    benefitType: '',
-    expiresAt: '',
-  });
+  const [success, setSuccess] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [togglingCard, setTogglingCard] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     logoUrl: '',
-    ownerEmail: '',
   });
 
   useEffect(() => {
-    // Don't try to load if id is 'new' - this route shouldn't be reached
     if (id && id !== 'new') {
       loadBusiness();
-      loadPromoCards();
     }
   }, [id]);
 
   const loadBusiness = async () => {
     try {
       setLoading(true);
+      setError('');
       const response = await adminService.getBusiness(id!);
-      const businessData = response.business;
-      setBusiness(businessData);
+      setBusiness(response.business);
+      setPromoCards(response.promoCards || []);
       setFormData({
-        name: businessData.name || '',
-        description: businessData.description || '',
-        logoUrl: businessData.logoUrl || '',
-        ownerEmail: businessData.ownerId?.email || '',
+        name: response.business.name || '',
+        description: response.business.description || '',
+        logoUrl: response.business.logoUrl || '',
       });
-    } catch (error: any) {
-      console.error('Error loading business:', error);
-      setError(error.message || 'Error al cargar el negocio');
+    } catch (err: any) {
+      setError(err.message || 'Error al cargar el negocio');
+      console.error('Error loading business:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const loadPromoCards = async () => {
-    try {
-      setLoadingCards(true);
-      const response = await adminService.getPromoCards(id!);
-      setPromoCards(response.cards || []);
-    } catch (error: any) {
-      console.error('Error loading promo cards:', error);
-    } finally {
-      setLoadingCards(false);
-    }
-  };
-
-  const handleCreateCard = async () => {
-    if (!business?._id) {
-      setError('No se encontró el negocio');
-      return;
-    }
-
-    setSaving(true);
+  const handleEdit = () => {
+    setIsEditing(true);
     setError('');
+    setSuccess(false);
+  };
 
-    try {
-      const data: any = {
-        businessId: business._id,
-        title: cardFormData.title,
-        description: cardFormData.description,
-        type: cardFormData.type,
-        benefitType: cardFormData.benefitType,
-      };
-
-      if (cardFormData.type === 'limited') {
-        const limit = parseInt(cardFormData.limit);
-        if (!limit || limit <= 0) {
-          setError('El límite debe ser un número positivo');
-          setSaving(false);
-          return;
-        }
-        data.limit = limit;
-      }
-
-      if (cardFormData.expiresAt) {
-        data.expiresAt = new Date(cardFormData.expiresAt).toISOString();
-      }
-
-      await adminService.createPromoCard(data);
-      setShowCreateCardModal(false);
-      setCardFormData({
-        title: '',
-        description: '',
-        type: 'unlimited',
-        limit: '',
-        benefitType: '',
-        expiresAt: '',
+  const handleCancel = () => {
+    setIsEditing(false);
+    setError('');
+    setSuccess(false);
+    // Reset form data to original business data
+    if (business) {
+      setFormData({
+        name: business.name || '',
+        description: business.description || '',
+        logoUrl: business.logoUrl || '',
       });
-      await loadPromoCards();
-      setSuccess('Tarjeta promocional creada exitosamente');
-      setTimeout(() => setSuccess(''), 3000);
+    }
+  };
+
+  const handleToggleCardActive = async (cardId: string, currentActive: boolean) => {
+    try {
+      setTogglingCard(cardId);
+      setError('');
+      const newActive = !currentActive;
+      await adminService.togglePromoCardActive(cardId, newActive);
+      
+      // Update local state
+      setPromoCards(promoCards.map(card => 
+        (card._id === cardId || card.id === cardId) 
+          ? { ...card, active: newActive }
+          : card
+      ));
     } catch (err: any) {
-      setError(err.message || 'Error al crear la tarjeta');
+      setError(err.message || 'Error al cambiar el estado de la tarjeta');
     } finally {
-      setSaving(false);
+      setTogglingCard(null);
     }
-  };
-
-  const getCardStatusBadge = (card: any) => {
-    if (card.soldOut) {
-      return <IonBadge color="danger">Agotada</IonBadge>;
-    }
-    if (!card.active) {
-      return <IonBadge color="medium">Inactiva</IonBadge>;
-    }
-    return <IonBadge color="success">Activa</IonBadge>;
-  };
-
-  const getCardTypeLabel = (card: any) => {
-    if (card.type === 'limited') {
-      return `Limitada (${card.remaining}/${card.limit})`;
-    }
-    return 'Ilimitada';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaving(true);
-    setSuccess('');
     setError('');
+    setSuccess(false);
+    setSaving(true);
 
     try {
       await adminService.updateBusiness(id!, {
         name: formData.name,
         description: formData.description || undefined,
         logoUrl: formData.logoUrl || undefined,
-        totalStamps: Number.parseInt(formData.totalStamps, 10) || undefined,
-        rewardText: formData.rewardText,
-        ownerEmail: formData.ownerEmail || undefined,
       });
-
-      setSuccess('Cambios guardados correctamente');
-      setTimeout(() => setSuccess(''), 3000);
-      await loadBusiness();
+      setSuccess(true);
+      setIsEditing(false);
+      setTimeout(() => {
+        setSuccess(false);
+        loadBusiness();
+      }, 2000);
     } catch (err: any) {
-      setError(err.message || 'Error al guardar cambios');
+      setError(err.message || 'Error al actualizar el negocio');
     } finally {
       setSaving(false);
     }
@@ -211,7 +152,7 @@ const BusinessDetails: React.FC = () => {
     );
   }
 
-  if (!business) {
+  if (error && !business) {
     return (
       <IonPage>
         <IonHeader>
@@ -223,11 +164,9 @@ const BusinessDetails: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <IonCard>
-            <IonCardContent>
-              <p>No se encontró el negocio.</p>
-            </IonCardContent>
-          </IonCard>
+          <div className="error-container">
+            <IonText color="danger">{error}</IonText>
+          </div>
         </IonContent>
       </IonPage>
     );
@@ -245,16 +184,23 @@ const BusinessDetails: React.FC = () => {
       </IonHeader>
       <IonContent>
         <div className="details-container">
-          <IonCard>
+          {/* Business Info Card */}
+          <IonCard className="business-info-card">
             <IonCardContent>
-              <h2 className="form-title">Editar Negocio</h2>
-
-              {success && (
-                <div className="success-message">
-                  <IonIcon icon={checkmarkCircle} />
-                  <IonText color="success">{success}</IonText>
-                </div>
-              )}
+              <div className="business-info-header">
+                <h2 className="section-title">Información del Negocio</h2>
+                {!isEditing && (
+                  <IonButton
+                    size="small"
+                    fill="outline"
+                    onClick={handleEdit}
+                    className="edit-button"
+                  >
+                    <IonIcon icon={createOutline} slot="start" />
+                    Editar
+                  </IonButton>
+                )}
+              </div>
 
               {error && (
                 <IonText color="danger" className="error-message">
@@ -262,224 +208,159 @@ const BusinessDetails: React.FC = () => {
                 </IonText>
               )}
 
-              <form onSubmit={handleSubmit}>
-                <IonItem>
-                  <IonLabel position="stacked">Nombre del Negocio *</IonLabel>
-                  <IonInput
-                    value={formData.name}
-                    onIonInput={(e) => setFormData({ ...formData, name: e.detail.value! })}
-                    required
-                  />
-                </IonItem>
+              {success && (
+                <IonText color="success" className="success-message">
+                  <IonIcon icon={checkmarkCircle} /> Negocio actualizado correctamente
+                </IonText>
+              )}
 
-                <IonItem>
-                  <IonLabel position="stacked">Descripción</IonLabel>
-                  <IonTextarea
-                    value={formData.description}
-                    onIonInput={(e) => setFormData({ ...formData, description: e.detail.value! })}
-                    rows={3}
-                  />
-                </IonItem>
-
-                <IonItem>
-                  <IonLabel position="stacked">URL del Logo</IonLabel>
-                  <IonInput
-                    type="url"
-                    value={formData.logoUrl}
-                    onIonInput={(e) => setFormData({ ...formData, logoUrl: e.detail.value! })}
-                  />
-                </IonItem>
-
-                <IonItem>
-                  <IonLabel position="stacked">Email del Propietario</IonLabel>
-                  <IonInput
-                    type="email"
-                    value={formData.ownerEmail}
-                    onIonInput={(e) => setFormData({ ...formData, ownerEmail: e.detail.value! })}
-                    placeholder="email@ejemplo.com"
-                  />
-                  <IonText slot="helper" color="medium">
-                    Dejar vacío para mantener el propietario actual
-                  </IonText>
-                </IonItem>
-
-                <IonButton
-                  expand="block"
-                  type="submit"
-                  disabled={saving}
-                  className="submit-button"
-                >
-                  {saving ? (
-                    <>
-                      <IonSpinner name="crescent" />
-                      Guardando...
-                    </>
-                  ) : (
-                    'Guardar Cambios'
+              {!isEditing ? (
+                <div className="business-info-view">
+                  <div className="info-row">
+                    <span className="info-label">Nombre:</span>
+                    <span className="info-value">{business?.name || 'N/A'}</span>
+                  </div>
+                  {business?.description && (
+                    <div className="info-row">
+                      <span className="info-label">Descripción:</span>
+                      <span className="info-value">{business.description}</span>
+                    </div>
                   )}
-                </IonButton>
-              </form>
-            </IonCardContent>
-          </IonCard>
+                  {business?.logoUrl && (
+                    <div className="info-row">
+                      <span className="info-label">Logo:</span>
+                      <span className="info-value">
+                        <a href={business.logoUrl} target="_blank" rel="noopener noreferrer">
+                          {business.logoUrl}
+                        </a>
+                      </span>
+                    </div>
+                  )}
+                  <div className="info-row">
+                    <span className="info-label">Propietario:</span>
+                    <span className="info-value">{business?.ownerId?.email || 'N/A'}</span>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit}>
+                  <IonItem>
+                    <IonLabel position="stacked">Nombre del Negocio *</IonLabel>
+                    <IonInput
+                      value={formData.name}
+                      onIonInput={(e) => setFormData({ ...formData, name: e.detail.value! })}
+                      required
+                    />
+                  </IonItem>
 
-          {/* Business Info Card */}
-          <IonCard>
-            <IonCardContent>
-              <h3 className="info-title">Información del Negocio</h3>
-              <div className="info-item">
-                <strong>ID:</strong> {business._id}
-              </div>
-              <div className="info-item">
-                <strong>Propietario:</strong> {business.ownerId?.name || 'N/A'} ({business.ownerId?.email || 'N/A'})
-              </div>
-              <div className="info-item">
-                <strong>Creado:</strong> {new Date(business.createdAt).toLocaleDateString('es-ES')}
-              </div>
-              <div className="info-item">
-                <strong>Última actualización:</strong> {new Date(business.updatedAt).toLocaleDateString('es-ES')}
-              </div>
+                  <IonItem>
+                    <IonLabel position="stacked">Descripción</IonLabel>
+                    <IonTextarea
+                      value={formData.description}
+                      onIonInput={(e) => setFormData({ ...formData, description: e.detail.value! })}
+                      rows={3}
+                    />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">URL del Logo</IonLabel>
+                    <IonInput
+                      type="url"
+                      value={formData.logoUrl}
+                      onIonInput={(e) => setFormData({ ...formData, logoUrl: e.detail.value! })}
+                    />
+                  </IonItem>
+
+                  <div className="form-actions">
+                    <IonButton
+                      fill="outline"
+                      onClick={handleCancel}
+                      disabled={saving}
+                    >
+                      <IonIcon icon={closeOutline} slot="start" />
+                      Cancelar
+                    </IonButton>
+                    <IonButton
+                      type="submit"
+                      disabled={saving}
+                      className="submit-button"
+                    >
+                      {saving ? (
+                        <>
+                          <IonSpinner name="crescent" />
+                          Guardando...
+                        </>
+                      ) : (
+                        <>
+                          <IonIcon icon={checkmarkCircle} slot="start" />
+                          Guardar
+                        </>
+                      )}
+                    </IonButton>
+                  </div>
+                </form>
+              )}
             </IonCardContent>
           </IonCard>
 
           {/* Promo Cards Section */}
           <IonCard>
             <IonCardContent>
-              <div className="cards-header">
-                <h3 className="info-title">Tarjetas Promocionales</h3>
-                <IonButton
-                  size="small"
-                  onClick={() => setShowCreateCardModal(true)}
-                  className="create-card-button"
-                >
-                  <IonIcon icon={add} slot="start" />
-                  Nueva Tarjeta
-                </IonButton>
-              </div>
+              <h2 className="section-title">Tarjetas de Promoción</h2>
 
-              {loadingCards ? (
-                <div className="loading-container">
-                  <IonSpinner name="crescent" />
-                  <p>Cargando tarjetas...</p>
-                </div>
-              ) : promoCards.length === 0 ? (
-                <div className="empty-state">
-                  <IonIcon icon={ticketOutline} size="large" />
-                  <p>No hay tarjetas promocionales creadas</p>
-                </div>
+              {promoCards.length === 0 ? (
+                <p className="empty-message">No hay tarjetas creadas aún</p>
               ) : (
-                <IonList>
+                <div className="cards-list">
                   {promoCards.map((card) => (
-                    <IonItem key={card._id}>
-                      <IonIcon icon={ticketOutline} slot="start" />
-                      <IonLabel>
-                        <h2>{card.title}</h2>
-                        <p>{card.description || 'Sin descripción'}</p>
-                        <p className="card-meta">
-                          {getCardTypeLabel(card)} • {card.benefitType}
-                        </p>
-                      </IonLabel>
-                      {getCardStatusBadge(card)}
-                    </IonItem>
+                    <IonCard key={card._id || card.id} className="promo-card-item">
+                      <IonCardContent>
+                        <div className="card-header">
+                          <div className="card-info">
+                            <h3>{card.title}</h3>
+                            {card.description && (
+                              <p className="card-description">{card.description}</p>
+                            )}
+                          </div>
+                          <IonBadge 
+                            color={card.active ? 'success' : 'danger'} 
+                            className={`${card.active ? 'active-badge' : 'inactive-badge'} clickable-badge`}
+                            onClick={() => handleToggleCardActive(card._id || card.id, card.active)}
+                          >
+                            {togglingCard === (card._id || card.id) ? (
+                              <>
+                                <IonSpinner name="crescent" />
+                                {card.active ? 'Desactivando...' : 'Activando...'}
+                              </>
+                            ) : (
+                              card.active ? 'Activa' : 'Inactiva'
+                            )}
+                          </IonBadge>
+                        </div>
+
+                        {card.type === 'stamp' && (
+                          <div className="card-details">
+                            <IonItem>
+                              <IonLabel>
+                                <h4>Sellos Requeridos</h4>
+                                <p>{card.totalStamps}</p>
+                              </IonLabel>
+                            </IonItem>
+                            <IonItem>
+                              <IonLabel>
+                                <h4>Recompensa</h4>
+                                <p>{card.rewardText}</p>
+                              </IonLabel>
+                            </IonItem>
+                          </div>
+                        )}
+                      </IonCardContent>
+                    </IonCard>
                   ))}
-                </IonList>
+                </div>
               )}
             </IonCardContent>
           </IonCard>
         </div>
-
-        {/* Create Promo Card Modal */}
-        <IonModal isOpen={showCreateCardModal} onDidDismiss={() => setShowCreateCardModal(false)}>
-          <IonHeader>
-            <IonToolbar color="primary">
-              <IonTitle>Nueva Tarjeta Promocional</IonTitle>
-              <IonButtons slot="end">
-                <IonButton onClick={() => setShowCreateCardModal(false)}>Cerrar</IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent className="ion-padding">
-            <IonItem>
-              <IonLabel position="stacked">Título *</IonLabel>
-              <IonInput
-                value={cardFormData.title}
-                onIonInput={(e) => setCardFormData({ ...cardFormData, title: e.detail.value! })}
-                placeholder="Ej: Desayuno Especial"
-              />
-            </IonItem>
-
-            <IonItem>
-              <IonLabel position="stacked">Descripción</IonLabel>
-              <IonTextarea
-                value={cardFormData.description}
-                onIonInput={(e) => setCardFormData({ ...cardFormData, description: e.detail.value! })}
-                rows={3}
-              />
-            </IonItem>
-
-            <IonItem>
-              <IonLabel position="stacked">Tipo de Tarjeta *</IonLabel>
-              <IonSelect
-                value={cardFormData.type}
-                onIonChange={(e) => setCardFormData({ ...cardFormData, type: e.detail.value, limit: '' })}
-              >
-                <IonSelectOption value="unlimited">Ilimitada</IonSelectOption>
-                <IonSelectOption value="limited">Limitada</IonSelectOption>
-              </IonSelect>
-            </IonItem>
-
-            {cardFormData.type === 'limited' && (
-              <IonItem>
-                <IonLabel position="stacked">Límite de Unidades *</IonLabel>
-                <IonInput
-                  type="number"
-                  value={cardFormData.limit}
-                  onIonInput={(e) => setCardFormData({ ...cardFormData, limit: e.detail.value! })}
-                  min="1"
-                  placeholder="Ej: 100"
-                />
-              </IonItem>
-            )}
-
-            <IonItem>
-              <IonLabel position="stacked">Tipo de Beneficio *</IonLabel>
-              <IonInput
-                value={cardFormData.benefitType}
-                onIonInput={(e) => setCardFormData({ ...cardFormData, benefitType: e.detail.value! })}
-                placeholder="Ej: Desayuno completo"
-              />
-            </IonItem>
-
-            <IonItem>
-              <IonLabel position="stacked">Fecha de Expiración (Opcional)</IonLabel>
-              <IonDatetimeButton datetime="cardExpiresDatetime"></IonDatetimeButton>
-              <IonModal keepContentsMounted={true}>
-                <IonDatetime
-                  id="cardExpiresDatetime"
-                  presentation="date-time"
-                  value={cardFormData.expiresAt}
-                  onIonChange={(e) => setCardFormData({ ...cardFormData, expiresAt: e.detail.value! as string })}
-                  min={new Date().toISOString()}
-                ></IonDatetime>
-              </IonModal>
-            </IonItem>
-
-            <IonButton
-              expand="block"
-              onClick={handleCreateCard}
-              disabled={saving || !cardFormData.title || !cardFormData.benefitType || (cardFormData.type === 'limited' && !cardFormData.limit)}
-              className="submit-button"
-            >
-              {saving ? (
-                <>
-                  <IonSpinner name="crescent" />
-                  Creando...
-                </>
-              ) : (
-                'Crear Tarjeta'
-              )}
-            </IonButton>
-          </IonContent>
-        </IonModal>
       </IonContent>
     </IonPage>
   );

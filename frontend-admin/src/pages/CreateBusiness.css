@@ -2,6 +2,14 @@
   padding: 1rem;
 }
 
+.form-card {
+  margin-bottom: 1.5rem;
+}
+
+.form-card:last-of-type {
+  margin-bottom: 0;
+}
+
 .form-title {
   font-size: 1.5rem;
   font-weight: bold;
@@ -14,14 +22,10 @@
   font-size: 1.2rem;
   font-weight: bold;
   color: #8B6F47;
-  margin-top: 2rem;
+  margin-top: 0;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid #8B6F47;
-}
-
-.section-subtitle:first-of-type {
-  margin-top: 0;
 }
 
 .section-description {
