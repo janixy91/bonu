@@ -2,59 +2,219 @@
   padding: 1rem;
 }
 
-.card-header {
+/* Stamp Card Styles */
+.stamp-card {
+  margin-bottom: 1.5rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stamp-card:active {
+  transform: scale(0.98);
+}
+
+.stamp-card.card-complete {
+  border: 3px solid var(--ion-color-success);
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8f5e9 100%);
+}
+
+.stamp-card-content {
+  padding: 1.5rem;
+}
+
+.stamp-card-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px dashed #e0e0e0;
 }
 
-.business-avatar {
-  width: 50px;
-  height: 50px;
+.stamp-card-logo {
+  flex-shrink: 0;
 }
 
-.avatar-placeholder {
-  width: 100%;
-  height: 100%;
+.business-logo-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid #e0e0e0;
+}
+
+.business-logo-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--ion-color-primary);
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
   color: white;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-.card-header-info {
+.stamp-card-title-section {
   flex: 1;
+  min-width: 0;
+}
+
+.stamp-card-business-name {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--ion-color-dark);
+  line-height: 1.2;
+}
+
+.stamp-card-reward {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ion-color-medium);
+  line-height: 1.4;
+}
+
+/* Stamps Grid */
+.stamps-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #fafafa;
+  border-radius: 12px;
+}
+
+.stamp {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stamp-empty {
+  background: white;
+  border: 2px dashed #d0d0d0;
+  background-image: 
+    radial-gradient(circle at 50% 50%, transparent 40%, #f0f0f0 40%),
+    radial-gradient(circle at 50% 50%, transparent 40%, #f0f0f0 40%);
+  background-size: 8px 8px;
+  background-position: 0 0, 4px 4px;
+}
+
+.stamp-filled {
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+  border: 2px solid var(--ion-color-primary);
+  box-shadow: 0 2px 8px rgba(139, 111, 71, 0.3);
+  animation: stampFill 0.5s ease;
+  position: relative;
+  overflow: visible;
+}
+
+.stamp-complete {
+  background: linear-gradient(135deg, var(--ion-color-success) 0%, #4caf50 100%);
+  border: 2px solid var(--ion-color-success);
+  box-shadow: 0 2px 12px rgba(76, 175, 80, 0.4);
+}
+
+.stamp-logo {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  animation: logoStamp 0.6s ease;
+}
+
+@keyframes logoStamp {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes stampFill {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Footer */
+.stamp-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 1rem;
+  border-top: 2px dashed #e0e0e0;
 }
 
-.progress-bar-container {
-  width: 100%;
-  height: 8px;
-  background: var(--ion-color-light);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 0.5rem;
+.stamp-progress-text {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
-.progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
-  transition: width 0.3s ease;
+.stamp-count {
+  color: var(--ion-color-primary);
+  font-size: 1.4rem;
 }
 
-.reward-text {
+.stamp-separator {
   color: var(--ion-color-medium);
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
+  font-size: 1rem;
 }
 
-.card-complete {
-  border: 2px solid var(--ion-color-success);
+.stamp-total {
+  color: var(--ion-color-dark);
+  font-size: 1.1rem;
+}
+
+.complete-badge {
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 360px) {
+  .stamps-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+  
+  .stamp-card-content {
+    padding: 1rem;
+  }
+  
+  .stamp-card-business-name {
+    font-size: 1.1rem;
+  }
 }
 
 .empty-state {

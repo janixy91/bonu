@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ticketOutline } from 'ionicons/icons';
 import { useAuthStore } from '../store/authStore';
-import { cardService } from '../services/api.service';
+import { tarjetaClienteService } from '../services/api.service';
 import './Home.css';
 
 const Home: React.FC = () => {
@@ -38,8 +38,21 @@ const Home: React.FC = () => {
   const loadCards = async () => {
     try {
       setLoading(true);
-      const response = await cardService.getUserCards();
-      setCards(response.cards);
+      const response = await tarjetaClienteService.getMisTarjetas();
+      // Transform the response to match the expected format
+      setCards((response.tarjetas || []).map(tarjeta => ({
+        _id: tarjeta.tarjetaClienteId,
+        businessId: {
+          _id: tarjeta.comercio?._id || tarjeta.comercio?.id,
+          name: tarjeta.comercio?.name,
+          logoUrl: tarjeta.comercio?.logoUrl,
+        },
+        currentStamps: tarjeta.sellosActuales || 0,
+        totalStamps: tarjeta.totalStamps || 10,
+        rewardText: tarjeta.valorRecompensa,
+        nombre: tarjeta.nombre,
+        estado: tarjeta.estadoCliente,
+      })));
     } catch (error) {
       console.error('Error loading cards:', error);
     } finally {
@@ -99,40 +112,57 @@ const Home: React.FC = () => {
           ) : (
             cards.map((card) => {
               const business = card.businessId;
-              const progress = getProgressPercentage(card.currentStamps, business.totalStamps);
-              const isComplete = card.currentStamps >= business.totalStamps;
+              const totalStamps = card.totalStamps || 10;
+              const currentStamps = card.currentStamps || 0;
+              const progress = getProgressPercentage(currentStamps, totalStamps);
+              const isComplete = currentStamps >= totalStamps;
 
               return (
                 <IonCard
                   key={card._id}
-                  className={isComplete ? 'card-complete' : ''}
-                  onClick={() => history.push(`/card/${card._id}`)}
+                  className={`stamp-card ${isComplete ? 'card-complete' : ''}`}
+                  onClick={() => history.push(`/mis-tarjetas`)}
                 >
-                  <IonCardHeader>
-                    <div className="card-header">
-                      <IonAvatar className="business-avatar">
-                        {business.logoUrl ? (
-                          <IonImg src={business.logoUrl} />
+                  <IonCardContent className="stamp-card-content">
+                    {/* Header with business info */}
+                    <div className="stamp-card-header">
+                      <div className="stamp-card-logo">
+                        {business?.logoUrl ? (
+                          <IonImg src={business.logoUrl} className="business-logo-img" />
                         ) : (
-                          <div className="avatar-placeholder">{business.name.charAt(0)}</div>
+                          <div className="business-logo-placeholder">
+                            {(business?.name || card.nombre || '?').charAt(0).toUpperCase()}
+                          </div>
                         )}
-                      </IonAvatar>
-                      <div className="card-header-info">
-                        <IonCardTitle>{business.name}</IonCardTitle>
-                        <IonBadge color={isComplete ? 'success' : 'medium'}>
-                          {card.currentStamps} / {business.totalStamps}
-                        </IonBadge>
+                      </div>
+                      <div className="stamp-card-title-section">
+                        <h2 className="stamp-card-business-name">{business?.name || card.nombre || 'Tarjeta'}</h2>
+                        <p className="stamp-card-reward">{card.rewardText || card.valorRecompensa || 'Recompensa'}</p>
                       </div>
                     </div>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <div className="progress-bar-container">
-                      <div
-                        className="progress-bar"
-                        style={{ width: `${progress}%` }}
-                      ></div>
+
+                    {/* Stamps grid */}
+                    <div className="stamps-grid">
+                      {Array.from({ length: totalStamps }, (_, index) => {
+                        const isFilled = index < currentStamps;
+                        return (
+                          <div
+                            key={index}
+                            className={`stamp ${isFilled ? 'stamp-filled' : 'stamp-empty'} ${isComplete && isFilled ? 'stamp-complete' : ''}`}
+                          >
+                            {isFilled && (
+                              <IonImg 
+                                src="/assets/logo-transparente.png" 
+                                className="stamp-logo"
+                                alt="BONU"
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
-                    <p className="reward-text">{business.rewardText}</p>
+
+                   
                   </IonCardContent>
                 </IonCard>
               );

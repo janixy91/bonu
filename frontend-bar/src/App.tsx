@@ -1,7 +1,9 @@
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useAuthStore } from './store/authStore';
+import { apiService } from './services/api.service';
 import Login from './pages/Login';
 import ValidateCode from './pages/ValidateCode';
 import TarjetasList from './pages/TarjetasList';
@@ -21,7 +23,15 @@ import '@ionic/react/css/display.css';
 setupIonicReact();
 
 function App() {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, logout } = useAuthStore();
+
+  useEffect(() => {
+    // Set up logout callback for API service
+    apiService.setLogoutCallback(() => {
+      logout();
+      // The redirect will happen automatically via the route guards
+    });
+  }, [logout]);
 
   return (
     <IonApp>
