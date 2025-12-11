@@ -6,7 +6,7 @@ import {
   IonLabel,
   IonRouterOutlet,
 } from '@ionic/react';
-import { home, search, person } from 'ionicons/icons';
+import { wallet, search, person } from 'ionicons/icons';
 import { Route, Redirect } from 'react-router-dom';
 import Home from './Home';
 import Explore from './Explore';
@@ -32,8 +32,8 @@ const Tabs: React.FC = () => {
 
       <IonTabBar slot="bottom">
         <IonTabButton tab="home" href="/tabs/home">
-          <IonIcon icon={home} />
-          <IonLabel>Inicio</IonLabel>
+          <IonIcon icon={wallet} />
+          <IonLabel>Colección</IonLabel>
         </IonTabButton>
 
         <IonTabButton tab="explore" href="/tabs/explore">

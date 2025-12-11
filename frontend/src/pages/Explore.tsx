@@ -4,145 +4,129 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonAvatar,
-  IonImg,
-  IonSkeletonText,
-  IonButton,
-  IonIcon,
   IonCard,
   IonCardContent,
+  IonSkeletonText,
+  IonButtons,
+  IonIcon,
+  IonButton,
 } from '@ionic/react';
-import { add, arrowForward } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { businessService, cardService } from '../services/api.service';
-import { useAuthStore } from '../store/authStore';
+import { ticketOutline } from 'ionicons/icons';
+import { tarjetaClienteService } from '../services/api.service';
+import StampCard from '../components/StampCard';
 import './Explore.css';
 
 const Explore: React.FC = () => {
-  const [businesses, setBusinesses] = useState<any[]>([]);
+  const [tarjetas, setTarjetas] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userCards, setUserCards] = useState<any[]>([]);
+  const [addingId, setAddingId] = useState<string | null>(null);
   const history = useHistory();
-  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
-    loadData();
+    loadTarjetas();
   }, []);
 
-  const loadData = async () => {
+  const loadTarjetas = async () => {
     try {
       setLoading(true);
-      const [businessesRes, cardsRes] = await Promise.all([
-        businessService.getBusinesses(),
-        cardService.getUserCards(),
-      ]);
-      console.log('Businesses received:', businessesRes.businesses?.length || 0);
-      console.log('Businesses data:', businessesRes.businesses);
-      setBusinesses(businessesRes.businesses || []);
-      setUserCards(cardsRes.cards || []);
+      const response = await tarjetaClienteService.getTarjetasDisponibles();
+      setTarjetas(response.tarjetas || []);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Error loading tarjetas:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const hasCard = (businessId: string) => {
-    return userCards.some((card) => card.businessId._id === businessId);
-  };
-
-  const handleAddCard = async (businessId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleAnadir = async (id: string) => {
     try {
-      await cardService.createCard(businessId);
-      await loadData();
+      setAddingId(id);
+      await tarjetaClienteService.anadirTarjeta(id);
+      await loadTarjetas();
+      alert('Tarjeta añadida exitosamente');
     } catch (error: any) {
       alert(error.message || 'Error al añadir tarjeta');
+    } finally {
+      setAddingId(null);
     }
   };
-
-  if (loading) {
-    return (
-      <IonPage>
-        <IonHeader>
-          <IonToolbar color="primary">
-            <IonTitle>Explorar Comercios</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent>
-          <IonList>
-            {[1, 2, 3, 4].map((i) => (
-              <IonItem key={i}>
-                <IonAvatar slot="start">
-                  <IonSkeletonText animated />
-                </IonAvatar>
-                <IonLabel>
-                  <IonSkeletonText animated style={{ width: '60%' }} />
-                  <IonSkeletonText animated style={{ width: '40%' }} />
-                </IonLabel>
-              </IonItem>
-            ))}
-          </IonList>
-        </IonContent>
-      </IonPage>
-    );
-  }
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle>Explorar Comercios</IonTitle>
+          <IonTitle style={{ paddingLeft: '0.75rem', textAlign: 'left' }}>Explorar</IonTitle>
+          <IonButtons slot="end">
+            <IonButton 
+              onClick={() => history.push('/redeem-code')} 
+              fill="outline"
+              color="light"
+              style={{ 
+                marginRight: '0.5rem',
+                '--border-radius': '8px',
+                '--border-width': '2px',
+                '--border-style': 'solid',
+                '--border-color': 'rgba(255, 255, 255, 0.5)',
+                fontWeight: '500'
+              }}
+            >
+              <IonIcon icon={ticketOutline} slot="start" style={{ marginRight: '0.5rem' }} />
+              Obtener sello
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        {businesses.length === 0 ? (
-          <div className="empty-state">
-            <p>No hay comercios disponibles</p>
-          </div>
-        ) : (
-          <IonList>
-            {businesses.map((business) => {
-              const alreadyHasCard = hasCard(business._id);
+      <IonContent fullscreen>
+        <div className="explore-container">
+          {loading ? (
+            <>
+              {[1, 2, 3].map((i) => (
+                <IonCard key={i} className="stamp-card">
+                  <IonCardContent className="stamp-card-content">
+                    <IonSkeletonText animated style={{ width: '60%', height: '20px' }} />
+                    <IonSkeletonText animated style={{ width: '40%', height: '16px', marginTop: '10px' }} />
+                  </IonCardContent>
+                </IonCard>
+              ))}
+            </>
+          ) : tarjetas.length === 0 ? (
+            <div className="empty-state">
+              <h3>No hay tarjetas disponibles</h3>
+              <p>Vuelve más tarde para ver nuevas tarjetas</p>
+            </div>
+          ) : (
+            tarjetas.map((tarjeta) => {
+              const totalStamps = tarjeta.totalStamps || 10;
+              const business = tarjeta.comercio;
+
               return (
-                <IonItem
-                  key={business._id}
-                  onClick={() => history.push(`/business/${business._id}`)}
-                  button
-                >
-                  <IonAvatar slot="start">
-                    {business.logoUrl ? (
-                      <IonImg src={business.logoUrl} />
-                    ) : (
-                      <div className="avatar-placeholder">{business.name.charAt(0)}</div>
-                    )}
-                  </IonAvatar>
-                  <IonLabel>
-                    <h2>{business.name}</h2>
-                    {business.description ? (
-                      <p className="business-description">{business.description}</p>
-                    ) : (
-                      <p className="business-description empty">Sin descripción</p>
-                    )}
-                  </IonLabel>
-                  {!alreadyHasCard && (
-                   
-                    <IonButton
-                      slot="end"
-                      fill="clear"
-                      onClick={(e) => handleAddCard(business._id, e)}
-                    >
-                      <IonIcon icon={add} />
-                    </IonButton>)}
-                </IonItem>
+                <StampCard
+                  key={tarjeta.id}
+                  id={tarjeta.id}
+                  businessName={business?.name}
+                  businessLogoUrl={business?.logoUrl}
+                  cardName={tarjeta.nombre}
+                  rewardText={tarjeta.valorRecompensa || 'Recompensa'}
+                  totalStamps={totalStamps}
+                  currentStamps={0}
+                  showAddButton={true}
+                  onAdd={() => handleAnadir(tarjeta.id)}
+                  isAdding={addingId === tarjeta.id}
+                  isAvailable={tarjeta.disponible}
+                  showBadge={tarjeta.tipo === 'limitada' && tarjeta.limiteActual !== undefined}
+                  badgeText={
+                    tarjeta.tipo === 'limitada' && tarjeta.limiteActual !== undefined
+                      ? `${tarjeta.limiteActual} disponibles`
+                      : undefined
+                  }
+                  badgeColor="warning"
+                />
               );
-            })}
-          </IonList>
-        )}
+            })
+          )}
+        </div>
       </IonContent>
     </IonPage>
   );
