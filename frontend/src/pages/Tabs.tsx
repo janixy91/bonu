@@ -6,15 +6,16 @@ import {
   IonLabel,
   IonRouterOutlet,
 } from '@ionic/react';
-import { wallet, search, person } from 'ionicons/icons';
+import { wallet, search, ticketOutline } from 'ionicons/icons';
 import { Route, Redirect } from 'react-router-dom';
 import Home from './Home';
 import Explore from './Explore';
-import Profile from './Profile';
+import RedeemCode from './RedeemCode';
+import './Tabs.css';
 
 const Tabs: React.FC = () => {
   return (
-    <IonTabs>
+    <IonTabs className="custom-tabs">
       <IonRouterOutlet>
         <Route exact path="/tabs/home">
           <Home />
@@ -22,28 +23,30 @@ const Tabs: React.FC = () => {
         <Route exact path="/tabs/explore">
           <Explore />
         </Route>
-        <Route exact path="/tabs/profile">
-          <Profile />
+        <Route exact path="/tabs/redeem">
+          <RedeemCode />
         </Route>
         <Route exact path="/tabs">
           <Redirect to="/tabs/home" />
         </Route>
       </IonRouterOutlet>
 
-      <IonTabBar slot="bottom">
-        <IonTabButton tab="home" href="/tabs/home">
+      <IonTabBar slot="bottom" className="custom-tab-bar">
+        <IonTabButton tab="home" href="/tabs/home" className="tab-button-side">
           <IonIcon icon={wallet} />
           <IonLabel>Colección</IonLabel>
         </IonTabButton>
 
-        <IonTabButton tab="explore" href="/tabs/explore">
-          <IonIcon icon={search} />
-          <IonLabel>Explorar</IonLabel>
+        <IonTabButton tab="redeem" href="/tabs/redeem" className="tab-button-center">
+          <div className="center-button-wrapper">
+            <IonIcon icon={ticketOutline} />
+            <IonLabel>Canjear Sellos</IonLabel>
+          </div>
         </IonTabButton>
 
-        <IonTabButton tab="profile" href="/tabs/profile">
-          <IonIcon icon={person} />
-          <IonLabel>Perfil</IonLabel>
+        <IonTabButton tab="explore" href="/tabs/explore" className="tab-button-side">
+          <IonIcon icon={search} />
+          <IonLabel>Explorar</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

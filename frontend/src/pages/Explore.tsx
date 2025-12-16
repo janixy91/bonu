@@ -78,7 +78,7 @@ const Explore: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen style={{ paddingBottom: '100px' }}>
         <div className="explore-container">
           {loading ? (
             <>

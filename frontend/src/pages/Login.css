@@ -1,5 +1,5 @@
 .login-content {
-  --background: var(--ion-color-background);
+  --background: var(--ion-color-light);
   position: relative;
   overflow: hidden;
 }

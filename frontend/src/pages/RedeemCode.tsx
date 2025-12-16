@@ -210,7 +210,7 @@ const RedeemCode: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen className="redeem-code-content">
+      <IonContent fullscreen className="redeem-code-content" style={{ paddingBottom: '100px' }}>
         <div className="redeem-container">
           {/* Generate OTP Code Section */}
           <IonCard>
