@@ -30,7 +30,7 @@
 
   --ion-color-blue: #1967bd;
   --ion-color-logo: #8f4b0f;
-  --ion-color-background: #f4f5f8;
+  /* --ion-color-background: #f4f5f8; */
 }
 
 * {
@@ -55,6 +55,11 @@ ion-button::part(native) {
 ion-label.input-label {
   margin-bottom: 0 !important;
   display: block;
-  
+}
+
+/* Menu button styles */
+ion-menu-button {
+  --color: white;
+  color: white !important;
 }
 

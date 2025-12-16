@@ -14,6 +14,7 @@ import {
   IonSpinner,
   IonIcon,
   IonButtons,
+  IonMenuButton,
 } from '@ionic/react';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -198,9 +199,7 @@ const RedeemCode: React.FC = () => {
       <IonHeader>
         <IonToolbar color="primary">
           <IonButtons slot="start">
-            <IonButton onClick={handleBack} className="header-button">
-              <IonIcon icon={arrowBack} />
-            </IonButton>
+            <IonMenuButton color="light" />
           </IonButtons>
           <IonTitle>Canjear código</IonTitle>
           <IonButtons slot="end">

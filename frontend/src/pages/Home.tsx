@@ -11,13 +11,13 @@ import {
   IonRefresher,
   IonRefresherContent,
   RefresherEventDetail,
+  IonButtons,
   IonButton,
   IonIcon,
-  IonButtons,
+  IonMenuButton,
 } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { ticketOutline } from 'ionicons/icons';
 import { useAuthStore } from '../store/authStore';
 import { tarjetaClienteService } from '../services/api.service';
 import StampCard from '../components/StampCard';
@@ -68,25 +68,10 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle style={{ paddingLeft: '0.75rem', textAlign: 'left' }}>Mi Colección</IonTitle>
-          <IonButtons slot="end">
-            <IonButton 
-              onClick={() => history.push('/redeem-code')} 
-              fill="outline"
-              color="light"
-              style={{ 
-                marginRight: '0.5rem',
-                '--border-radius': '8px',
-                '--border-width': '2px',
-                '--border-style': 'solid',
-                '--border-color': 'rgba(255, 255, 255, 0.5)',
-                fontWeight: '500'
-              }}
-            >
-              <IonIcon icon={ticketOutline} slot="start" style={{ marginRight: '0.5rem' }} />
-              Obtener sello
-            </IonButton>
+          <IonButtons slot="start">
+            <IonMenuButton color="light" />
           </IonButtons>
+          <IonTitle>Mi Colección</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen style={{ paddingBottom: '100px' }}>

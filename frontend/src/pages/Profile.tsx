@@ -12,8 +12,9 @@ import {
   IonButton,
   IonIcon,
   IonButtons,
+  IonMenuButton,
 } from '@ionic/react';
-import { logOut, person, ticketOutline } from 'ionicons/icons';
+import { logOut, person } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import './Profile.css';
@@ -32,25 +33,10 @@ const Profile: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle style={{ paddingLeft: '0.75rem', textAlign: 'left' }}>Perfil</IonTitle>
-          <IonButtons slot="end">
-            <IonButton 
-              onClick={() => history.push('/redeem-code')} 
-              fill="outline"
-              color="light"
-              style={{ 
-                marginRight: '0.5rem',
-                '--border-radius': '8px',
-                '--border-width': '2px',
-                '--border-style': 'solid',
-                '--border-color': 'rgba(255, 255, 255, 0.5)',
-                fontWeight: '500'
-              }}
-            >
-              <IonIcon icon={ticketOutline} slot="start" style={{ marginRight: '0.5rem' }} />
-              Obtener sello
-            </IonButton>
+          <IonButtons slot="start">
+            <IonMenuButton color="light" />
           </IonButtons>
+          <IonTitle>Perfil</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
