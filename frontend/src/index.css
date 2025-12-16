@@ -26,6 +26,11 @@
   --ion-color-dark: #2B2B2B;
   --ion-color-medium: #92949c;
   --ion-color-light: #f4f5f8;
+
+
+  --ion-color-blue: #1967bd;
+  --ion-color-logo: #8f4b0f;
+  --ion-color-background: #f4f5f8;
 }
 
 * {
@@ -40,5 +45,15 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+ion-button::part(native) {
+  background: var(--ion-color-logo) !important;
+}
+
+/* ion-label styles - apply directly to the component */
+ion-label.input-label {
+  margin-bottom: 0 !important;
+  display: block;
 }
 

@@ -1,21 +1,16 @@
 import {
   IonContent,
   IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonItem,
   IonLabel,
   IonInput,
   IonButton,
   IonText,
-  IonCard,
-  IonCardContent,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import './Auth.css';
+import './Login.css';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -42,64 +37,78 @@ const Login: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>BONU</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="auth-content">
-        <div className="auth-container">
-          <IonCard>
-            <IonCardContent>
-              <h2 className="auth-title">Iniciar Sesión</h2>
+      <IonContent className="login-content">
+        <div className="login-container">
+          <div className="login-card">
+            <div className="logo-container">
+              <img 
+                src="/assets/logo-transparente.png" 
+                alt="BONU Logo" 
+                className="login-logo"
+              />
+            </div>
 
-              {error && (
-                <IonText color="danger" className="error-message">
-                  {error}
-                </IonText>
-              )}
+            <h1 className="login-title">Bienvenido</h1>
+            <p className="login-subtitle">Inicia sesión para continuar</p>
 
-              <form onSubmit={handleSubmit}>
-                <IonItem>
-                  <IonLabel position="stacked">Email</IonLabel>
+            {error && (
+              <div className="error-container">
+                <IonText color="danger">{error}</IonText>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="login-form">
+              <div className="input-wrapper">
+                <IonItem className="custom-input-item" lines="none">
+                  <IonLabel position="stacked" className="input-label">
+                    Email
+                  </IonLabel>
                   <IonInput
                     type="email"
                     value={email}
                     onIonInput={(e) => setEmail(e.detail.value!)}
                     required
+                    className="custom-input"
+                    placeholder="tu@email.com"
                   />
                 </IonItem>
+              </div>
 
-                <IonItem>
-                  <IonLabel position="stacked">Contraseña</IonLabel>
+              <div className="input-wrapper">
+                <IonItem className="custom-input-item" lines="none">
+                  <IonLabel position="stacked" className="input-label">
+                    Contraseña
+                  </IonLabel>
                   <IonInput
                     type="password"
                     value={password}
                     onIonInput={(e) => setPassword(e.detail.value!)}
                     required
+                    className="custom-input"
+                    placeholder="••••••••"
                   />
                 </IonItem>
-
-                <IonButton
-                  expand="block"
-                  type="submit"
-                  disabled={loading}
-                  className="auth-button"
-                >
-                  {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-                </IonButton>
-              </form>
-
-              <div className="auth-footer">
-                <IonText>
-                  ¿No tienes cuenta?{' '}
-                  <Link to="/register" className="auth-link">
-                    Regístrate
-                  </Link>
-                </IonText>
               </div>
-            </IonCardContent>
-          </IonCard>
+
+              <IonButton
+                expand="block"
+                type="submit"
+                disabled={loading}
+                className="login-button"
+              >
+                {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+              </IonButton>
+            </form>
+
+            <div className="login-footer">
+              <IonText className="footer-text">
+                ¿No tienes cuenta?{' '}
+                <Link to="/register" className="register-link">
+                  Regístrate
+                </Link>
+              </IonText>
+            </div>
+          </div>
         </div>
       </IonContent>
     </IonPage>
