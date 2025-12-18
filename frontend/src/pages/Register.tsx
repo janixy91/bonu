@@ -33,10 +33,12 @@ const Register: React.FC = () => {
 
     try {
       await register(email, password, name);
-      history.push('/tabs/home');
+      // Small delay to ensure state is persisted
+      setTimeout(() => {
+        window.location.href = '/tabs/home';
+      }, 100);
     } catch (err: any) {
       setError(err.message || 'Error al registrarse');
-    } finally {
       setLoading(false);
     }
   };

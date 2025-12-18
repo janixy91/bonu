@@ -7,11 +7,11 @@
   position: relative;
   min-height: 40px;
   height: auto;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(26, 32, 44, 0.98);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  border-top: none;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
   padding: 0;
   padding-top: 10px;
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
@@ -23,18 +23,7 @@
 }
 
 .custom-tab-bar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(139, 111, 71, 0.2) 20%, 
-    rgba(139, 111, 71, 0.2) 80%, 
-    transparent 100%
-  );
+  display: none;
 }
 
 /* Side tabs (Colección & Explorar) */
@@ -46,7 +35,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   z-index: 1;
@@ -55,6 +44,7 @@
 .tab-button-side ion-icon {
   font-size: 24px;
   transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .tab-button-side ion-label {
@@ -62,19 +52,20 @@
   font-weight: 500;
   margin-top: 2px;
   transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .tab-button-side.tab-selected {
-  color: var(--ion-color-primary);
+  color: white;
 }
 
 .tab-button-side.tab-selected ion-icon {
   transform: scale(1.1);
-  color: var(--ion-color-primary);
+  color: white;
 }
 
 .tab-button-side.tab-selected ion-label {
-  color: var(--ion-color-primary);
+  color: white;
   font-weight: 600;
 }
 
@@ -87,7 +78,8 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+  background: #8B6F47 !important;
+  --background: #8B6F47 !important;
   box-shadow: 
     0 8px 24px rgba(139, 111, 71, 0.4),
     0 4px 12px rgba(139, 111, 71, 0.3),
@@ -96,11 +88,16 @@
   align-items: center;
   justify-content: center;
   z-index: 1001;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: visible !important;
   color: white;
   margin: 0;
   padding: 0;
+}
+
+.tab-button-center::part(native) {
+  background: #8B6F47 !important;
+  --background: #8B6F47 !important;
 }
 
 .tab-button-center::before {
@@ -108,7 +105,7 @@
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+  background: #8B6F47;
   opacity: 0.3;
   z-index: -1;
   filter: blur(8px);
@@ -145,6 +142,9 @@
   justify-content: center;
   gap: 2px;
   color: white;
+  overflow: visible !important;
+  position: relative;
+  z-index: 1;
 }
 
 .tab-button-center ion-icon {
@@ -176,9 +176,18 @@ ion-content {
   --padding-bottom: calc(90px + env(safe-area-inset-bottom));
 }
 
-/* Smooth transitions */
+/* Smooth transitions and transparent background */
 ion-tab-button {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: visible !important;
+  --background: transparent !important;
+  background: transparent !important;
+}
+
+ion-tab-button::part(native) {
+  overflow: visible !important;
+  background: transparent !important;
+  --background: transparent !important;
 }
 
 /* Active state indicator for side tabs */
@@ -190,7 +199,7 @@ ion-tab-button {
   transform: translateX(-50%) scaleX(0);
   width: 24px;
   height: 3px;
-  background: var(--ion-color-primary);
+  background: white;
   border-radius: 2px;
   transition: transform 0.3s ease;
 }
@@ -233,20 +242,5 @@ ion-tab-bar {
 ion-tab-bar::part(native) {
   overflow: visible !important;
   contain: none !important;
-}
-
-ion-tab-button {
-  overflow: visible !important;
-}
-
-ion-tab-button::part(native) {
-  overflow: visible !important;
-}
-
-/* Ensure the center button wrapper doesn't clip */
-.center-button-wrapper {
-  overflow: visible !important;
-  position: relative;
-  z-index: 1;
 }
 

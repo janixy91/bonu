@@ -29,7 +29,7 @@ import '@ionic/react/css/display.css';
 setupIonicReact();
 
 function App() {
-  const { isAuthenticated, hasCompletedOnboarding, logout } = useAuthStore();
+  const { isAuthenticated, hasCompletedOnboarding, logout, _hasHydrated } = useAuthStore();
 
   useEffect(() => {
     // Set up logout callback for API service
@@ -38,6 +38,11 @@ function App() {
       // The redirect will happen automatically via the route guards
     });
   }, [logout]);
+
+  // Don't render routes until state has been hydrated from localStorage
+  if (!_hasHydrated) {
+    return <IonApp><div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Cargando...</div></IonApp>;
+  }
 
   return (
     <IonApp>

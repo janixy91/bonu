@@ -14,6 +14,8 @@ interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   hasCompletedOnboarding: boolean;
+  _hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => void;
@@ -29,6 +31,10 @@ export const useAuthStore = create<AuthState>()(
       refreshToken: null,
       isAuthenticated: false,
       hasCompletedOnboarding: false,
+      _hasHydrated: false,
+      setHasHydrated: (state: boolean) => {
+        set({ _hasHydrated: state });
+      },
 
       login: async (email: string, password: string) => {
         const response = await authService.login(email, password);
@@ -75,6 +81,9 @@ export const useAuthStore = create<AuthState>()(
     {
       name: 'bonu-auth-storage',
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

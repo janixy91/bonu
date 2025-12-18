@@ -1,5 +1,5 @@
 .menu-header {
-  padding: 2rem 1.5rem;
+  padding: var(--spacing-xl) var(--spacing-md);
   text-align: center;
   background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
   color: white;
@@ -8,9 +8,10 @@
 .menu-avatar {
   width: 80px;
   height: 80px;
-  margin: 0 auto 1rem;
+  margin: 0 auto var(--spacing-md);
   border: 3px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-md);
+  border-radius: 50%;
 }
 
 .menu-header .avatar-placeholder {
@@ -21,16 +22,17 @@
   justify-content: center;
   background: rgba(255, 255, 255, 0.2);
   color: white;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 2.5rem;
   border-radius: 50%;
 }
 
 .menu-header h3 {
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 var(--spacing-xs) 0;
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 700;
   color: white;
+  letter-spacing: -0.02em;
 }
 
 .menu-header p {
@@ -40,24 +42,26 @@
 }
 
 ion-list {
-  padding: 0.5rem 0;
+  padding: var(--spacing-xs) 0;
 }
 
 ion-item {
-  --padding-start: 1.5rem;
-  --padding-end: 1.5rem;
+  --padding-start: var(--spacing-md);
+  --padding-end: var(--spacing-md);
   --min-height: 56px;
+  --border-radius: 0;
+  margin-bottom: var(--spacing-xs);
 }
 
 ion-item ion-icon {
-  margin-right: 1rem;
+  margin-right: var(--spacing-sm);
   font-size: 1.5rem;
   color: var(--ion-color-primary);
 }
 
 .logout-item {
   --color: var(--ion-color-danger);
-  margin-top: 0.5rem;
+  margin-top: var(--spacing-xs);
 }
 
 .logout-item ion-icon {
