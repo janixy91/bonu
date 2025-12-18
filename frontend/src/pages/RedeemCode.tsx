@@ -197,7 +197,7 @@ const RedeemCode: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar color="primary">
+        <IonToolbar style={{ '--background': 'rgba(26, 32, 44, 0.98)' }}>
           <IonButtons slot="start">
             <IonMenuButton color="light" />
           </IonButtons>

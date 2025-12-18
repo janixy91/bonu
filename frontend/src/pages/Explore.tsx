@@ -56,7 +56,7 @@ const Explore: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar color="primary">
+        <IonToolbar style={{ '--background': 'rgba(26, 32, 44, 0.98)' }}>
           <IonTitle style={{ paddingLeft: '0.75rem', textAlign: 'left' }}>Explorar</IonTitle>
           <IonButtons slot="end">
             <IonButton 

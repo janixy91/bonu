@@ -101,26 +101,7 @@
 }
 
 .tab-button-center::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  background: #8B6F47;
-  opacity: 0.3;
-  z-index: -1;
-  filter: blur(8px);
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.05);
-  }
+  display: none;
 }
 
 .tab-button-center:active {
