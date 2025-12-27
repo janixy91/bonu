@@ -4,6 +4,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuthStore } from './store/authStore';
 import { apiService } from './services/api.service';
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import CreateBusiness from './pages/CreateBusiness';
@@ -46,6 +47,9 @@ function App() {
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
+          <Route exact path="/landing">
+            <Landing />
+          </Route>
           <Route exact path="/login">
             {isAuthenticated ? <Redirect to={getDefaultRoute()} /> : <Login />}
           </Route>
@@ -85,7 +89,7 @@ function App() {
             )}
           </Route>
           <Route exact path="/">
-            <Redirect to={getDefaultRoute()} />
+            <Redirect to="/landing" />
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>

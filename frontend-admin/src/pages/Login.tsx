@@ -1,18 +1,14 @@
 import {
   IonContent,
   IonPage,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
   IonItem,
   IonLabel,
   IonInput,
   IonButton,
   IonText,
-  IonCard,
-  IonCardContent,
+  useIonViewWillEnter,
 } from '@ionic/react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import './Login.css';
@@ -24,6 +20,12 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const login = useAuthStore((state) => state.login);
+  const contentRef = useRef<HTMLIonContentElement>(null);
+
+  // Scroll to top when view enters
+  useIonViewWillEnter(() => {
+    contentRef.current?.scrollToTop(0);
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,56 +52,73 @@ const Login: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>BONU Admin</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="login-content">
+      <IonContent ref={contentRef} className="login-content">
         <div className="login-container">
-          <IonCard>
-            <IonCardContent>
-              <h2 className="login-title">Panel de Administración</h2>
-              <p className="login-subtitle">Acceso para administradores y dueños de negocios</p>
+          <div className="login-card">
+            <div className="logo-container">
+              <img 
+                src="/assets/logo-transparente.png" 
+                alt="BONU Logo" 
+                className="login-logo"
+                onError={(e) => {
+                  // Fallback si no se encuentra el logo
+                  console.error('Logo not found at /assets/logo-transparente.png');
+                }}
+              />
+            </div>
 
-              {error && (
-                <IonText color="danger" className="error-message">
-                  {error}
-                </IonText>
-              )}
+            <h1 className="login-title">Panel de Administración</h1>
+            <p className="login-subtitle">Acceso para administradores y dueños de negocios</p>
 
-              <form onSubmit={handleSubmit}>
-                <IonItem>
-                  <IonLabel position="stacked">Email</IonLabel>
+            {error && (
+              <div className="error-container">
+                <IonText color="danger">{error}</IonText>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="login-form">
+              <div className="input-wrapper">
+                <IonItem className="custom-input-item" lines="none">
+                  <IonLabel position="stacked" className="input-label">
+                    Email
+                  </IonLabel>
                   <IonInput
                     type="email"
                     value={email}
                     onIonInput={(e) => setEmail(e.detail.value!)}
                     required
+                    className="custom-input"
+                    placeholder="tu@email.com"
                   />
                 </IonItem>
+              </div>
 
-                <IonItem>
-                  <IonLabel position="stacked">Contraseña</IonLabel>
+              <div className="input-wrapper">
+                <IonItem className="custom-input-item" lines="none">
+                  <IonLabel position="stacked" className="input-label">
+                    Contraseña
+                  </IonLabel>
                   <IonInput
                     type="password"
                     value={password}
                     onIonInput={(e) => setPassword(e.detail.value!)}
                     required
+                    className="custom-input"
+                    placeholder="••••••••"
                   />
                 </IonItem>
+              </div>
 
-                <IonButton
-                  expand="block"
-                  type="submit"
-                  disabled={loading}
-                  className="login-button"
-                >
-                  {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-                </IonButton>
-              </form>
-            </IonCardContent>
-          </IonCard>
+              <IonButton
+                expand="block"
+                type="submit"
+                disabled={loading}
+                className="login-button"
+              >
+                {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+              </IonButton>
+            </form>
+          </div>
         </div>
       </IonContent>
     </IonPage>
