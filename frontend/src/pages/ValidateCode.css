@@ -61,8 +61,8 @@
 
 .submit-button {
   margin-bottom: 1rem;
-  --background: #8B6F47;
-  --background-activated: #6B8E5A;
+  /* --background: #8B6F47;
+  --background-activated: #6B8E5A; */
 }
 
 .back-button {

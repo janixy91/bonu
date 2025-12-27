@@ -6,8 +6,9 @@ import {
   IonInput,
   IonButton,
   IonText,
+  useIonViewWillEnter,
 } from '@ionic/react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import './Login.css';
@@ -19,6 +20,12 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const login = useAuthStore((state) => state.login);
+  const contentRef = useRef<HTMLIonContentElement>(null);
+
+  // Scroll to top when view enters
+  useIonViewWillEnter(() => {
+    contentRef.current?.scrollToTop(0);
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +46,7 @@ const Login: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent className="login-content">
+      <IonContent ref={contentRef} className="login-content">
         <div className="login-container">
           <div className="login-card">
             <div className="logo-container">

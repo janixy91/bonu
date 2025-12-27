@@ -1,10 +1,10 @@
-.login-content {
+.register-content {
   --background: var(--ion-color-light);
   position: relative;
   overflow: hidden;
 }
 
-.login-content::before {
+.register-content::before {
   content: '';
   position: absolute;
   top: -50%;
@@ -26,7 +26,7 @@
   }
 }
 
-.login-container {
+.register-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,7 +36,7 @@
   z-index: 1;
 }
 
-.login-card {
+.register-card {
   width: 100%;
   max-width: 420px;
   background: rgba(26, 32, 44, 0.98);
@@ -64,17 +64,17 @@
   margin-bottom: 1rem;
 }
 
-.login-logo {
+.register-logo {
   width: 120px;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
   background: white;
-    padding: 10px;
-    border-radius: 50%;
+  padding: 10px;
+  border-radius: 50%;
 }
 
-.login-title {
+.register-title {
   text-align: center;
   font-size: 2rem;
   font-weight: 700;
@@ -83,7 +83,7 @@
   letter-spacing: -0.5px;
 }
 
-.login-subtitle {
+.register-subtitle {
   text-align: center;
   font-size: 1rem;
   color: #cbd5e0;
@@ -107,7 +107,7 @@
   75% { transform: translateX(10px); }
 }
 
-.login-form {
+.register-form {
   margin-top: 1rem;
 }
 
@@ -141,10 +141,7 @@
   background: transparent !important;
 }
 
-.custom-input-item ion-input .native-input {
-  background: transparent !important;
-  color: var(--ion-color-primary) !important;
-}
+
 
 .custom-input-item ion-input .native-wrapper {
   background: transparent !important;
@@ -192,6 +189,7 @@
 .custom-input-item .native-input {
   padding-left: 8px !important;
   padding-right: 8px !important;
+  color: #f7fafc !important;
   background: transparent !important;
 }
 
@@ -212,10 +210,6 @@ ion-input {
   background: transparent !important;
 }
 
-ion-input input {
-  color: var(--ion-color-primary) !important;
-  background: transparent !important;
-}
 
 .custom-input-item .input-wrapper {
   background: transparent !important;
@@ -233,17 +227,12 @@ ion-input input {
   background: transparent !important;
 }
 
-.custom-input-item .native-input {
-  background: transparent !important;
-}
-
 .custom-input-item input::placeholder {
   color: #a0aec0 !important;
   opacity: 0.7;
 }
 
-
-.login-button {
+.register-button {
   margin-top: var(--spacing-md);
   --border-radius: var(--radius-md);
   --box-shadow: var(--shadow-sm);
@@ -255,7 +244,7 @@ ion-input input {
   --background-hover: #1a6fc7;
 }
 
-.login-footer {
+.register-footer {
   text-align: center;
   margin-top: 2rem;
   padding-top: 1.5rem;
@@ -267,54 +256,54 @@ ion-input input {
   color: #cbd5e0;
 }
 
-.register-link {
+.login-link {
   color: var(--ion-color-blue);
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
 }
 
-.register-link:hover {
+.login-link:hover {
   color: #1559a3;
   text-decoration: underline;
 }
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
-  .login-card {
+  .register-card {
     padding: 2rem 1.5rem;
     border-radius: 20px;
   }
 
-  .login-title {
+  .register-title {
     font-size: 1.75rem;
   }
 
-  .login-logo {
+  .register-logo {
     width: 100px;
   }
 }
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-  .login-card {
+  .register-card {
     background: rgba(26, 32, 44, 0.98);
   }
 
-  .login-title {
+  .register-title {
     color: #f7fafc;
   }
 
-  .login-subtitle {
-    color: #a0aec0;
+  .register-subtitle {
+    color: #cbd5e0;
   }
 
   .custom-input-item {
-    --background: #2d3748;
+    --background: rgba(45, 55, 72, 0.5);
   }
 
   .custom-input-item:focus-within {
-    --background: #374151;
+    --background: rgba(55, 65, 81, 0.7);
   }
 
   .input-label {
@@ -326,11 +315,11 @@ ion-input input {
   }
 
   .footer-text {
-    color: #a0aec0;
+    color: #cbd5e0;
   }
 
-  .login-footer {
-    border-top-color: #4a5568;
+  .register-footer {
+    border-top-color: rgba(203, 213, 224, 0.2);
   }
 }
 
