@@ -18,7 +18,7 @@ import {
 } from '@ionic/react';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { checkmarkCircle, closeCircle, ticketOutline, qrCodeOutline, arrowBack, close } from 'ionicons/icons';
+import { checkmarkCircle, closeCircle, ticketOutline, qrCodeOutline, arrowBack, close, phonePortraitOutline } from 'ionicons/icons';
 import { codeService, otpService } from '../services/api.service';
 import { useAuthStore } from '../store/authStore';
 import './RedeemCode.css';
@@ -211,8 +211,26 @@ const RedeemCode: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen className="redeem-code-content" style={{ paddingBottom: '100px' }}>
         <div className="redeem-container">
+          {/* NFC Section */}
+          <IonCard className="nfc-section-card">
+            <IonCardContent>
+              <div className="nfc-section">
+                <IonIcon icon={phonePortraitOutline} size="large" className="nfc-icon" />
+                <h2 className="section-title">Usa NFC</h2>
+                <p className="section-description">
+                  Pide al camarero que acerque su dispositivo NFC de Bonu a tu teléfono
+                </p>
+              </div>
+            </IonCardContent>
+          </IonCard>
+
+          {/* Separator */}
+          <div className="section-separator">
+            <span className="separator-text">ó</span>
+          </div>
+
           {/* Generate OTP Code Section */}
-          <IonCard>
+          {/* <IonCard>
             <IonCardContent>
               <div className="otp-code-section">
                 <IonIcon icon={qrCodeOutline} size="large" className="otp-icon" />
@@ -255,16 +273,16 @@ const RedeemCode: React.FC = () => {
                 )}
               </div>
             </IonCardContent>
-          </IonCard>
+          </IonCard> */}
 
           {/* Redeem Code Section */}
           <IonCard>
             <IonCardContent>
               <div className="code-input-section">
                 <IonIcon icon={ticketOutline} size="large" className="ticket-icon" />
-                <h2 className="section-title">Introduce tu código</h2>
+                <h2 className="section-title">Introduce un código</h2>
                 <p className="section-description">
-                  Ingresa el código de tu cupón o papel para canjear tu beneficio
+                  Ingresa el código de tu cupón o papel para canjear tu sello
                 </p>
 
                 <IonItem className="code-input-item">
@@ -273,7 +291,7 @@ const RedeemCode: React.FC = () => {
                     type="text"
                     value={code}
                     onIonInput={(e) => handleCodeChange(e.detail.value!)}
-                    placeholder="ABC123"
+                    placeholder="..."
                     maxlength={10}
                     className="code-input"
                     disabled={validating}
@@ -308,7 +326,7 @@ const RedeemCode: React.FC = () => {
                 <IonButton
                   expand="block"
                   onClick={handleRedeem}
-                  disabled={code.length < 6 || validating}
+                  disabled={code.length < 3 || validating}
                   className="submit-button"
                 >
                   {validating ? (

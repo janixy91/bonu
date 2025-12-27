@@ -33,6 +33,18 @@ const Home: React.FC = () => {
     loadCards();
   }, []);
 
+  // Listen for card added event
+  useEffect(() => {
+    const handleCardAdded = () => {
+      loadCards();
+    };
+
+    window.addEventListener('cardAdded', handleCardAdded);
+    return () => {
+      window.removeEventListener('cardAdded', handleCardAdded);
+    };
+  }, []);
+
   const loadCards = async () => {
     try {
       setLoading(true);
@@ -115,7 +127,7 @@ const Home: React.FC = () => {
                   totalStamps={totalStamps}
                   currentStamps={currentStamps}
                   isComplete={isComplete}
-                  onClick={() => history.push(`/mis-tarjetas`)}
+                  description={card.descripcion}
                 />
               );
             })

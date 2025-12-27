@@ -168,6 +168,16 @@ class ApiService {
     return this.request<{ user: { id: string; email: string; name: string; createdAt: string } }>('/auth/me');
   }
 
+  async updateProfile(name: string) {
+    return this.request<{
+      message: string;
+      user: { id: string; email: string; name: string; role: string };
+    }>('/auth/profile', {
+      method: 'PATCH',
+      body: JSON.stringify({ name }),
+    });
+  }
+
   // Business endpoints
   async getBusinesses() {
     return this.request<{ businesses: any[] }>('/business');
@@ -279,6 +289,7 @@ export const authService = {
     apiService.register(email, password, name),
   refresh: (refreshToken: string) => apiService.refresh(refreshToken),
   getMe: () => apiService.getMe(),
+  updateProfile: (name: string) => apiService.updateProfile(name),
 };
 
 export const businessService = {

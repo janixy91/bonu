@@ -1,10 +1,22 @@
+.header-button {
+  --color: white;
+  color: white;
+}
+
 .profile-container {
-  padding: var(--spacing-md);
   max-width: 600px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-xs);
+}
+
+.profile-container ion-card {
+  margin: var(--spacing-xs) var(--spacing-md);
+}
+
+.profile-container ion-card:first-child {
+  margin-top: var(--spacing-md);
 }
 
 .profile-header {
@@ -27,7 +39,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+  background: var(--ion-color-primary);
   color: white;
   font-weight: 700;
   font-size: 3rem;
@@ -47,14 +59,150 @@
   font-size: 1rem;
 }
 
-.logout-button {
+.logout-button-container {
+  padding: var(--spacing-md);
   margin-top: var(--spacing-md);
-  --border-radius: var(--radius-md);
-  --background: var(--ion-color-danger);
-  --background-activated: #dc2626;
-  --background-hover: #ef4444;
+  text-align: center;
+}
+
+.logout-text {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ion-color-blue);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  text-decoration: underline;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.logout-text:hover {
+  opacity: 0.8;
+}
+
+.logout-text:active {
+  opacity: 0.6;
+}
+
+.logout-icon {
+  font-size: 1.1rem;
+  color: var(--ion-color-blue);
+}
+
+/* Edit Profile Modal Styles */
+.edit-profile-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+.edit-profile-form {
+  padding: var(--spacing-sm) 0;
+}
+
+.save-profile-button {
+  margin-top: var(--spacing-md);
+  --background: linear-gradient(135deg, #8B6F47 0%, #A0825F 100%);
+  --background-activated: linear-gradient(135deg, #7a6240 0%, #8B6F47 100%);
+  --background-hover: linear-gradient(135deg, #977d59 0%, #B08F6B 100%);
+  --color: white;
+  font-weight: 600;
   height: 48px;
+  --border-radius: var(--radius-md);
+}
+
+/* Success Alert Styles */
+.success-alert {
+  --background: white;
+  --border-radius: var(--radius-lg);
+}
+
+.success-alert .alert-wrapper {
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.success-alert .alert-head {
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-md);
+  background: linear-gradient(135deg, rgba(107, 142, 90, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.success-alert .alert-title {
+  color: var(--ion-color-success);
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-xs);
+}
+
+.success-alert .alert-message {
+  color: #4a5568;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 0 var(--spacing-md);
+}
+
+.success-alert .alert-button-group {
+  padding: var(--spacing-md);
+}
+
+.success-alert .alert-button {
+  --background: linear-gradient(135deg, #8B6F47 0%, #A0825F 100%);
+  --color: white;
+  --border-radius: var(--radius-md);
   font-weight: 600;
   text-transform: none;
+  margin: 0;
+  height: 44px;
+}
+
+/* Error Alert Styles */
+.error-alert {
+  --background: white;
+  --border-radius: var(--radius-lg);
+}
+
+.error-alert .alert-wrapper {
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.error-alert .alert-head {
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-md);
+  background: linear-gradient(135deg, rgba(231, 111, 81, 0.1) 0%, rgba(255, 255, 255, 1) 100%);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.error-alert .alert-title {
+  color: var(--ion-color-danger);
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-xs);
+}
+
+.error-alert .alert-message {
+  color: #4a5568;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 0 var(--spacing-md);
+}
+
+.error-alert .alert-button-group {
+  padding: var(--spacing-md);
+}
+
+.error-alert .alert-button {
+  --background: var(--ion-color-danger);
+  --color: white;
+  --border-radius: var(--radius-md);
+  font-weight: 600;
+  text-transform: none;
+  margin: 0;
+  height: 44px;
 }
 

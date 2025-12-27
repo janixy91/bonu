@@ -8,12 +8,11 @@ import {
   IonCardContent,
   IonSkeletonText,
   IonButtons,
-  IonIcon,
-  IonButton,
+  IonMenuButton,
+  IonAlert,
 } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { ticketOutline } from 'ionicons/icons';
 import { tarjetaClienteService } from '../services/api.service';
 import StampCard from '../components/StampCard';
 import './Explore.css';
@@ -22,6 +21,10 @@ const Explore: React.FC = () => {
   const [tarjetas, setTarjetas] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [addingId, setAddingId] = useState<string | null>(null);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [addedCardName, setAddedCardName] = useState('');
   const history = useHistory();
 
   useEffect(() => {
@@ -43,11 +46,20 @@ const Explore: React.FC = () => {
   const handleAnadir = async (id: string) => {
     try {
       setAddingId(id);
+      const tarjeta = tarjetas.find(t => t.id === id);
+      const cardName = tarjeta?.nombre || tarjeta?.comercio?.name || 'tarjeta';
+      
       await tarjetaClienteService.anadirTarjeta(id);
       await loadTarjetas();
-      alert('Tarjeta añadida exitosamente');
+      
+      setAddedCardName(cardName);
+      setShowSuccessAlert(true);
+      
+      // Emitir evento para actualizar la lista de colección
+      window.dispatchEvent(new CustomEvent('cardAdded'));
     } catch (error: any) {
-      alert(error.message || 'Error al añadir tarjeta');
+      setErrorMessage(error.message || 'Error al añadir tarjeta');
+      setShowErrorAlert(true);
     } finally {
       setAddingId(null);
     }
@@ -57,25 +69,10 @@ const Explore: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar style={{ '--background': 'rgba(26, 32, 44, 0.98)' }}>
-          <IonTitle style={{ paddingLeft: '0.75rem', textAlign: 'left' }}>Explorar</IonTitle>
-          <IonButtons slot="end">
-            <IonButton 
-              onClick={() => history.push('/redeem-code')} 
-              fill="outline"
-              color="light"
-              style={{ 
-                marginRight: '0.5rem',
-                '--border-radius': '8px',
-                '--border-width': '2px',
-                '--border-style': 'solid',
-                '--border-color': 'rgba(255, 255, 255, 0.5)',
-                fontWeight: '500'
-              }}
-            >
-              <IonIcon icon={ticketOutline} slot="start" style={{ marginRight: '0.5rem' }} />
-              Obtener sello
-            </IonButton>
+          <IonButtons slot="start">
+            <IonMenuButton color="light" />
           </IonButtons>
+          <IonTitle>Explorar</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen style={{ paddingBottom: '100px' }}>
@@ -122,12 +119,44 @@ const Explore: React.FC = () => {
                       : undefined
                   }
                   badgeColor="warning"
+                  description={tarjeta.descripcion}
                 />
               );
             })
           )}
         </div>
       </IonContent>
+
+      {/* Success Alert */}
+      <IonAlert
+        isOpen={showSuccessAlert}
+        onDidDismiss={() => setShowSuccessAlert(false)}
+        header="¡Tarjeta añadida!"
+        message={`${addedCardName} se ha añadido exitosamente a tu colección`}
+        buttons={[
+          {
+            text: 'Ver mi colección',
+            handler: () => {
+              history.push('/tabs/home');
+            }
+          },
+          {
+            text: 'Continuar explorando',
+            role: 'cancel'
+          }
+        ]}
+        cssClass="success-alert"
+      />
+
+      {/* Error Alert */}
+      <IonAlert
+        isOpen={showErrorAlert}
+        onDidDismiss={() => setShowErrorAlert(false)}
+        header="Error"
+        message={errorMessage}
+        buttons={['OK']}
+        cssClass="error-alert"
+      />
     </IonPage>
   );
 };

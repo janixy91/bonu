@@ -21,6 +21,7 @@ interface AuthState {
   logout: () => void;
   setOnboardingComplete: () => void;
   refreshAccessToken: () => Promise<void>;
+  updateProfile: (name: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -76,6 +77,13 @@ export const useAuthStore = create<AuthState>()(
         }
         const response = await authService.refresh(refreshToken);
         set({ accessToken: response.accessToken });
+      },
+
+      updateProfile: async (name: string) => {
+        const response = await authService.updateProfile(name);
+        set({
+          user: response.user,
+        });
       },
     }),
     {

@@ -8,9 +8,56 @@
 }
 
 .redeem-container {
-  padding: var(--spacing-md);
   max-width: 600px;
   margin: 0 auto;
+}
+
+.nfc-section {
+  text-align: center;
+  padding: var(--spacing-sm) 0;
+}
+
+.nfc-section-card {
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(135deg, rgba(139, 111, 71, 0.05) 0%, rgba(255, 255, 255, 0.98) 100%);
+  border: 2px solid rgba(139, 111, 71, 0.1);
+}
+
+.nfc-icon {
+  color: var(--ion-color-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.section-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: var(--spacing-md) 0;
+  position: relative;
+}
+
+.section-separator::before,
+.section-separator::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e2e8f0;
+}
+
+.section-separator::before {
+  margin-right: var(--spacing-sm);
+}
+
+.section-separator::after {
+  margin-left: var(--spacing-sm);
+}
+
+.separator-text {
+  color: #718096;
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 0 var(--spacing-sm);
+  background: var(--ion-color-light);
 }
 
 .code-input-section {

@@ -9,9 +9,12 @@ import {
   IonLabel,
   IonIcon,
   IonAvatar,
+  IonButtons,
+  IonButton,
 } from '@ionic/react';
-import { person, logOut } from 'ionicons/icons';
+import { person, close } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+import { useRef } from 'react';
 import { useAuthStore } from '../store/authStore';
 import './Menu.css';
 
@@ -19,21 +22,33 @@ const Menu: React.FC = () => {
   const history = useHistory();
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
+  const menuRef = useRef<HTMLIonMenuElement>(null);
 
   const handleProfile = () => {
+    menuRef.current?.close();
     history.push('/tabs/profile');
   };
 
-  const handleLogout = () => {
-    logout();
-    history.push('/login');
+
+  const handleClose = () => {
+    menuRef.current?.close();
   };
 
   return (
-    <IonMenu side="start" menuId="main-menu" contentId="main-content">
+    <IonMenu ref={menuRef} side="start" menuId="main-menu" contentId="main-content">
       <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>Menú</IonTitle>
+        <IonToolbar style={{ '--background': 'rgba(26, 32, 44, 0.98)' }}>
+          <IonButtons slot="start">
+            <IonButton onClick={handleClose} className="menu-close-button">
+              <IonIcon icon={close} />
+            </IonButton>
+          </IonButtons>
+          <IonTitle style={{ textAlign: 'center' }}>Menú</IonTitle>
+          <IonButtons slot="end">
+            <IonButton className="menu-close-button" style={{ opacity: 0, pointerEvents: 'none' }}>
+              <IonIcon icon={close} />
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -48,10 +63,6 @@ const Menu: React.FC = () => {
           <IonItem button onClick={handleProfile}>
             <IonIcon icon={person} slot="start" />
             <IonLabel>Perfil</IonLabel>
-          </IonItem>
-          <IonItem button onClick={handleLogout} className="logout-item">
-            <IonIcon icon={logOut} slot="start" />
-            <IonLabel>Cerrar Sesión</IonLabel>
           </IonItem>
         </IonList>
       </IonContent>
