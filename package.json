@@ -1,4 +1,10 @@
-{"scripts": {
-    "heroku-postbuild": "cd $PROJECT_PATH && npm install && npm run build",
-    "start": "cd $PROJECT_PATH && npm start"
-}}
+{
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "heroku-postbuild": "cd backend && npm install",
+    "start": "cd backend && npm start"
+  }
+}
