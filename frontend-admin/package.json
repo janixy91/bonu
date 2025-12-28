@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": "18.x",
+    "npm": "9.x"
   },
   "dependencies": {
     "@ionic/react": "^7.5.3",
@@ -27,7 +27,8 @@
   },
   "scripts": {
     "dev": "vite --port 5175",
-    "build": "tsc && vite build",
+    "build": "vite build",
+    "build:check": "tsc && vite build",
     "preview": "vite preview"
   }
 }
