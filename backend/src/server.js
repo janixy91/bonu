@@ -44,19 +44,53 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'BONU API is running' });
 });
 
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/bonu')
-  .then(() => {
-    console.log('✅ Connected to MongoDB');
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error('❌ MongoDB connection error:', error);
-    process.exit(1);
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    message: 'BONU API is running',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      docs: 'API documentation coming soon'
+    }
   });
+});
+
+// Connect to MongoDB
+const connectDB = async () => {
+  try {
+    const mongoUri = process.env.MONGODB_URI;
+    if (!mongoUri) {
+      console.error('❌ MONGODB_URI environment variable is not set');
+      process.exit(1);
+    }
+    
+    await mongoose.connect(mongoUri);
+    console.log('✅ Connected to MongoDB');
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error.message);
+    console.error('Full error:', error);
+    process.exit(1);
+  }
+};
+
+// Start server
+const startServer = () => {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  });
+};
+
+// Connect to DB and start server
+connectDB().then(() => {
+  startServer();
+}).catch((error) => {
+  console.error('❌ Failed to start server:', error);
+  process.exit(1);
+});
 
 export default app;
 
