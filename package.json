@@ -1,10 +1,10 @@
 {
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": "18.x",
+    "npm": "9.x"
   },
   "scripts": {
-    "heroku-postbuild": "cd $PROJECT_PATH && npm install && npm run build",
-    "start": "cd $PROJECT_PATH && npm start"
+    "heroku-postbuild": "cd backend && npm install",
+    "start": "cd backend && npm start"
   }
 }

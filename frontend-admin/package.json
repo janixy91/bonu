@@ -15,15 +15,15 @@
     "react-dom": "^18.2.0",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
+    "vite": "^5.0.8",
+    "@vitejs/plugin-react": "^4.2.1",
     "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
-    "@vitejs/plugin-react": "^4.2.1",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.8"
+    "typescript": "^5.3.3"
   },
   "scripts": {
     "dev": "vite --port 5175",
