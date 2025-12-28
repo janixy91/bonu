@@ -323,7 +323,7 @@ const Landing: React.FC = () => {
             <div className="contact-buttons">
               <IonButton 
                 className="whatsapp-button"
-                href="https://wa.me/1234567890" 
+                href="https://wa.me/34663152183?text=Hola%20he%20visto%20BONU%20y%20me%20interesa%20el%20piloto" 
                 target="_blank"
                 rel="noopener noreferrer"
               >
