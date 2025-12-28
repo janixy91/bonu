@@ -11,8 +11,7 @@ interface User {
 
 interface AuthState {
   user: User | null;
-  accessToken: string | null;
-  refreshToken: string | null;
+  token: string | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -22,16 +21,14 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
-      accessToken: null,
-      refreshToken: null,
+      token: null,
       isAuthenticated: false,
 
       login: async (email: string, password: string) => {
         const response = await authService.login(email, password);
         set({
           user: response.user,
-          accessToken: response.accessToken,
-          refreshToken: response.refreshToken,
+          token: response.token,
           isAuthenticated: true,
         });
       },
@@ -39,8 +36,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({
           user: null,
-          accessToken: null,
-          refreshToken: null,
+          token: null,
           isAuthenticated: false,
         });
       },

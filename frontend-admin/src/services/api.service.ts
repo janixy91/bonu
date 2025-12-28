@@ -11,15 +11,15 @@ class ApiService {
   }
 
   private getAuthHeaders(): HeadersInit {
-    const token = localStorage.getItem('bonu-admin-auth');
-    if (token) {
+    const stored = localStorage.getItem('bonu-admin-auth');
+    if (stored) {
       try {
-        const parsed = JSON.parse(token);
-        const accessToken = parsed.state?.accessToken;
-        if (accessToken) {
+        const parsed = JSON.parse(stored);
+        const token = parsed.state?.token;
+        if (token) {
           return {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           };
         }
       } catch (e) {
@@ -32,43 +32,10 @@ class ApiService {
   }
 
   private async handleTokenExpiration(): Promise<boolean> {
-    // Try to refresh token first
-    const token = localStorage.getItem('bonu-admin-auth');
-    if (token) {
-      try {
-        const parsed = JSON.parse(token);
-        const refreshToken = parsed.state?.refreshToken;
-        
-        if (refreshToken) {
-          try {
-            // Use direct fetch to avoid recursion
-            const refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ refreshToken }),
-            });
-
-            if (refreshResponse.ok) {
-              const data = await refreshResponse.json();
-              // Update stored token
-              const updatedParsed = { ...parsed };
-              updatedParsed.state.accessToken = data.accessToken;
-              localStorage.setItem('bonu-admin-auth', JSON.stringify(updatedParsed));
-              return true; // Token refreshed successfully
-            }
-          } catch (refreshError) {
-            // Refresh failed, proceed to logout
-            console.log('Token refresh failed, logging out');
-          }
-        }
-      } catch (e) {
-        // Ignore parse errors
-      }
-    }
-
-    // Logout if refresh failed or no refresh token
+    // With the new JWT system, tokens are long-lived (90 days)
+    // If we get a 401/403, the token is invalid or expired
+    // Just logout - no refresh token available
+    
     // Clear storage first
     localStorage.removeItem('bonu-admin-auth');
     
@@ -141,8 +108,7 @@ class ApiService {
   async login(email: string, password: string) {
     return this.request<{
       user: { id: string; email: string; name: string; role: string };
-      accessToken: string;
-      refreshToken: string;
+      token: string;
     }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
