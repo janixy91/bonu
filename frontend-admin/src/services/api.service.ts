@@ -1,3 +1,6 @@
+// API Base URL configuration
+// In production, set VITE_API_URL in Heroku config vars
+// Example: heroku config:set VITE_API_URL=https://bonu-backend-4d28f40884c3.herokuapp.com/api
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 class ApiService {
