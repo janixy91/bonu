@@ -15,9 +15,13 @@ import {
   IonRefresherContent,
   IonSegment,
   IonSegmentButton,
+  IonButton,
+  IonIcon,
+  IonAlert,
   useIonViewWillEnter,
 } from '@ionic/react';
 import { useState, useEffect, useRef } from 'react';
+import { checkmarkCircle, closeCircle } from 'ionicons/icons';
 import { adminPilotService } from '../services/api.service';
 import './PilotRegistrations.css';
 
@@ -38,6 +42,11 @@ const PilotRegistrations: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
+  const [approvingId, setApprovingId] = useState<string | null>(null);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const contentRef = useRef<HTMLIonContentElement>(null);
 
   useIonViewWillEnter(() => {
@@ -103,6 +112,28 @@ const PilotRegistrations: React.FC = () => {
       hour: '2-digit',
       minute: '2-digit',
     });
+  };
+
+  const handleApprove = async (registrationId: string) => {
+    try {
+      setApprovingId(registrationId);
+      setError('');
+      
+      const response = await adminPilotService.approvePilotRegistration(registrationId);
+      
+      setSuccessMessage(
+        `Solicitud aprobada exitosamente. Usuario y negocio creados. Contraseña temporal: ${response.data.temporaryPassword}`
+      );
+      setShowSuccessAlert(true);
+      
+      // Reload registrations to update status
+      await loadRegistrations();
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Error al aprobar la solicitud');
+      setShowErrorAlert(true);
+    } finally {
+      setApprovingId(null);
+    }
   };
 
   const pendingCount = registrations.filter((r) => r.status === 'pending').length;
@@ -218,6 +249,29 @@ const PilotRegistrations: React.FC = () => {
                         <IonText color="medium" className="date-text">
                           <small>Solicitud recibida: {formatDate(registration.createdAt)}</small>
                         </IonText>
+                        
+                        {registration.status === 'pending' && (
+                          <div className="action-buttons">
+                            <IonButton
+                              color="success"
+                              size="small"
+                              onClick={() => handleApprove(registration._id)}
+                              disabled={approvingId === registration._id}
+                            >
+                              {approvingId === registration._id ? (
+                                <>
+                                  <IonSpinner name="crescent" />
+                                  Aceptando...
+                                </>
+                              ) : (
+                                <>
+                                  <IonIcon icon={checkmarkCircle} slot="start" />
+                                  Aceptar
+                                </>
+                              )}
+                            </IonButton>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </IonCardContent>
@@ -227,6 +281,24 @@ const PilotRegistrations: React.FC = () => {
           )}
         </div>
       </IonContent>
+
+      <IonAlert
+        isOpen={showSuccessAlert}
+        onDidDismiss={() => setShowSuccessAlert(false)}
+        header="¡Éxito!"
+        message={successMessage}
+        buttons={['OK']}
+        cssClass="success-alert"
+      />
+
+      <IonAlert
+        isOpen={showErrorAlert}
+        onDidDismiss={() => setShowErrorAlert(false)}
+        header="Error"
+        message={errorMessage}
+        buttons={['OK']}
+        cssClass="error-alert"
+      />
     </IonPage>
   );
 };

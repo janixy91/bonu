@@ -292,19 +292,32 @@ class ApiService {
   async getPilotRegistrations(status?: 'pending' | 'approved' | 'rejected') {
     const query = status ? `?status=${status}` : '';
     return this.request<{
-      registrations: Array<{
-        _id: string;
-        businessName: string;
-        email: string;
-        contactName: string;
-        address: string;
-        status: string;
-        notes?: string;
-        createdAt: string;
-        updatedAt: string;
-      }>;
+      registrations: any[];
       total: number;
     }>(`/pilot/registrations${query}`);
+  }
+
+  async approvePilotRegistration(registrationId: string) {
+    return this.request<{
+      message: string;
+      data: {
+        user: {
+          id: string;
+          email: string;
+          name: string;
+          role: string;
+        };
+        business: {
+          id: string;
+          name: string;
+          description: string;
+        };
+        temporaryPassword: string;
+        emailSent: boolean;
+      };
+    }>(`/pilot/registrations/${registrationId}/approve`, {
+      method: 'POST',
+    });
   }
 }
 
@@ -366,5 +379,7 @@ export const pilotService = {
 export const adminPilotService = {
   getPilotRegistrations: (status?: 'pending' | 'approved' | 'rejected') => 
     apiService.getPilotRegistrations(status),
+  approvePilotRegistration: (registrationId: string) => 
+    apiService.approvePilotRegistration(registrationId),
 };
 

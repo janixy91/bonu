@@ -111,11 +111,35 @@
 .registration-footer {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--ion-color-light);
+  border-top: 1px solid var(--ion-color-light-shade);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .date-text {
   font-size: 0.875rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.action-buttons ion-button {
+  --height: 36px;
+  font-size: 0.875rem;
+}
+
+.success-alert {
+  --background: var(--ion-color-success-tint);
+}
+
+.error-alert {
+  --background: var(--ion-color-danger-tint);
 }
 
 /* Responsive */

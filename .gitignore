@@ -9,4 +9,7 @@ ios/
 android/
 .vscode/
 .idea/
+.env.prod
 
+
+https://bonu-admin-3bf56296efb4.herokuapp.com/tap?local=1234567890
