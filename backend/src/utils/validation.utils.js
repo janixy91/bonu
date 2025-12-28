@@ -4,11 +4,13 @@ export const registerSchema = z.object({
   email: z.string().email('Invalid email format'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   name: z.string().min(2, 'Name must be at least 2 characters'),
+  deviceId: z.string().uuid('deviceId debe ser un UUID válido').optional(),
 });
 
 export const loginSchema = z.object({
   email: z.string().email('Invalid email format'),
   password: z.string().min(1, 'Password is required'),
+  deviceId: z.string().uuid('deviceId debe ser un UUID válido').optional(),
 });
 
 export const businessSchema = z.object({
