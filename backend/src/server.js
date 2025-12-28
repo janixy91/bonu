@@ -13,6 +13,7 @@ import businessOwnerRoutes from './routes/business-owner.routes.js';
 import codeRoutes from './routes/code.routes.js';
 import promoCardRoutes from './routes/promoCard.routes.js';
 import clienteRoutes from './routes/cliente.routes.js';
+import pilotRoutes from './routes/pilot.routes.js';
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use('/api/business-owner', businessOwnerRoutes);
 app.use('/api/codes', codeRoutes);
 app.use('/api/admin/promo-cards', promoCardRoutes);
 app.use('/api/cliente', clienteRoutes);
+app.use('/api/pilot', pilotRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

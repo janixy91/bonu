@@ -296,6 +296,47 @@ class ApiService {
       unused: number;
     }>(`/codes/business/${businessId}`);
   }
+
+  // Pilot registration endpoint (no auth required)
+  async registerPilot(data: {
+    businessName: string;
+    email: string;
+    contactName: string;
+    address: string;
+  }) {
+    return this.request<{
+      message: string;
+      data: {
+        id: string;
+        businessName: string;
+        email: string;
+        contactName: string;
+        address: string;
+      };
+    }>('/pilot/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }, false); // No retry on 401 for public endpoint
+  }
+
+  // Admin: Get pilot registrations
+  async getPilotRegistrations(status?: 'pending' | 'approved' | 'rejected') {
+    const query = status ? `?status=${status}` : '';
+    return this.request<{
+      registrations: Array<{
+        _id: string;
+        businessName: string;
+        email: string;
+        contactName: string;
+        address: string;
+        status: string;
+        notes?: string;
+        createdAt: string;
+        updatedAt: string;
+      }>;
+      total: number;
+    }>(`/pilot/registrations${query}`);
+  }
 }
 
 export const apiService = new ApiService();
@@ -342,5 +383,19 @@ export const businessOwnerService = {
 export const codeService = {
   generateCodes: (data: any) => apiService.generateCodes(data),
   getBusinessCodes: (businessId: string) => apiService.getBusinessCodes(businessId),
+};
+
+export const pilotService = {
+  registerPilot: (data: {
+    businessName: string;
+    email: string;
+    contactName: string;
+    address: string;
+  }) => apiService.registerPilot(data),
+};
+
+export const adminPilotService = {
+  getPilotRegistrations: (status?: 'pending' | 'approved' | 'rejected') => 
+    apiService.getPilotRegistrations(status),
 };
 

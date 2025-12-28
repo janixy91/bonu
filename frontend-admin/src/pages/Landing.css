@@ -1,6 +1,5 @@
 .landing-content {
   --background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
-}
 
 /* Hero Section */
 .hero-section {
@@ -105,9 +104,9 @@
 }
 
 .cta-button.primary {
-  --background: var(--ion-color-blue);
-  --background-activated: #1559a3;
-  --background-hover: #1a6fc7;
+  --background: var(--ion-color-primary);
+  --background-activated: var(--ion-color-primary-shade);
+  --background-hover: var(--ion-color-primary-tint);
   --color: white;
 }
 
@@ -170,7 +169,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--ion-color-blue) 0%, #1a6fc7 100%);
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-tint) 100%);
   border-radius: 20px;
   color: white;
   font-size: 2.5rem;
@@ -200,12 +199,12 @@
 /* Validation Methods Section - MAIN FEATURE */
 .validation-section {
   padding: 6rem 2rem;
-  background: linear-gradient(135deg, rgba(25, 103, 189, 0.05) 0%, rgba(25, 103, 189, 0.02) 100%);
+  background: linear-gradient(135deg, rgba(139, 111, 71, 0.05) 0%, rgba(139, 111, 71, 0.02) 100%);
   text-align: center;
 }
 
 .section-description {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: #4a5568;
   line-height: 1.8;
   max-width: 800px;
@@ -225,20 +224,20 @@
   border-radius: 24px;
   padding: 3rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 2px solid rgba(25, 103, 189, 0.1);
+  border: 2px solid rgba(139, 111, 71, 0.1);
   transition: all 0.3s ease;
   text-align: center;
 }
 
 .validation-method-card.highlight {
-  border-color: var(--ion-color-blue);
-  box-shadow: 0 12px 40px rgba(25, 103, 189, 0.2);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(25, 103, 189, 0.02) 100%);
+  border-color: var(--ion-color-primary);
+  box-shadow: 0 12px 40px rgba(139, 111, 71, 0.2);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(139, 111, 71, 0.02) 100%);
 }
 
 .validation-method-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 16px 48px rgba(25, 103, 189, 0.25);
+  box-shadow: 0 16px 48px rgba(139, 111, 71, 0.25);
 }
 
 .method-icon {
@@ -248,11 +247,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--ion-color-blue) 0%, #1a6fc7 100%);
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-tint) 100%);
   border-radius: 24px;
   color: white;
   font-size: 3.5rem;
-  box-shadow: 0 8px 24px rgba(25, 103, 189, 0.3);
+  box-shadow: 0 8px 24px rgba(139, 111, 71, 0.3);
 }
 
 .method-title {
@@ -270,7 +269,7 @@
 }
 
 .method-description strong {
-  color: var(--ion-color-blue);
+  color: var(--ion-color-primary);
   font-weight: 700;
 }
 
@@ -298,19 +297,19 @@
 }
 
 .step.highlight-step {
-  background: linear-gradient(135deg, rgba(25, 103, 189, 0.05) 0%, rgba(25, 103, 189, 0.02) 100%);
+  background: linear-gradient(135deg, rgba(139, 111, 71, 0.05) 0%, rgba(139, 111, 71, 0.02) 100%);
   padding: 1.5rem;
   border-radius: 16px;
-  border: 2px solid rgba(25, 103, 189, 0.2);
+  border: 2px solid rgba(139, 111, 71, 0.2);
 }
 
 .step.highlight-step .step-number {
-  background: linear-gradient(135deg, var(--ion-color-blue) 0%, #1a6fc7 100%);
-  box-shadow: 0 6px 20px rgba(25, 103, 189, 0.4);
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-tint) 100%);
+  box-shadow: 0 6px 20px rgba(139, 111, 71, 0.4);
 }
 
 .step.highlight-step .step-description strong {
-  color: var(--ion-color-blue);
+  color: var(--ion-color-primary);
   font-weight: 700;
 }
 
@@ -321,12 +320,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--ion-color-blue) 0%, #1a6fc7 100%);
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-tint) 100%);
   border-radius: 50%;
   color: white;
   font-size: 1.75rem;
   font-weight: 700;
-  box-shadow: 0 4px 16px rgba(25, 103, 189, 0.3);
+  box-shadow: 0 4px 16px rgba(139, 111, 71, 0.3);
 }
 
 .step-title {
@@ -344,7 +343,7 @@
 }
 
 .step-arrow {
-  color: var(--ion-color-blue);
+  color: var(--ion-color-primary);
   font-size: 2rem;
   flex-shrink: 0;
 }
@@ -358,17 +357,17 @@
 .pilot-card {
   max-width: 800px;
   margin: 0 auto;
-  background: linear-gradient(135deg, rgba(25, 103, 189, 0.05) 0%, rgba(25, 103, 189, 0.02) 100%);
+  background: linear-gradient(135deg, rgba(139, 111, 71, 0.05) 0%, rgba(139, 111, 71, 0.02) 100%);
   border-radius: 24px;
   padding: 3rem;
-  border: 2px solid rgba(25, 103, 189, 0.1);
+  border: 2px solid rgba(139, 111, 71, 0.1);
   text-align: center;
 }
 
 .pilot-title {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--ion-color-blue);
+  color: var(--ion-color-primary);
   margin: 0 0 1.5rem 0;
 }
 
@@ -405,7 +404,7 @@
 }
 
 .benefit-icon {
-  color: var(--ion-color-blue);
+  color: var(--ion-color-primary);
   font-size: 1.5rem;
   flex-shrink: 0;
   margin-top: 2px;
@@ -460,6 +459,66 @@
   color: #cbd5e0;
 }
 
+/* Contact Section */
+.contact-section {
+  padding: 6rem 2rem;
+  background: white;
+  text-align: center;
+}
+
+.contact-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.whatsapp-button {
+  --background: #25D366;
+  --background-activated: #20BA5A;
+  --background-hover: #2AE372;
+  --color: white;
+  --border-radius: 16px;
+  height: 56px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: none;
+  padding: 0 2rem;
+  --box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
+}
+
+.whatsapp-button ion-icon {
+  margin-right: 0.75rem;
+}
+
+.whatsapp-button:hover {
+  --box-shadow: 0 6px 24px rgba(37, 211, 102, 0.4);
+  transform: translateY(-2px);
+}
+
+.instagram-button {
+  --border-color: #E4405F;
+  --color: #E4405F;
+  --border-radius: 16px;
+  --border-width: 2px;
+  height: 56px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: none;
+  padding: 0 2rem;
+}
+
+.instagram-button ion-icon {
+  margin-right: 0.75rem;
+}
+
+.instagram-button:hover {
+  --background: rgba(228, 64, 95, 0.1);
+  transform: translateY(-2px);
+}
+
 /* Footer */
 .landing-footer {
   padding: 3rem 2rem;
@@ -499,6 +558,37 @@
   font-size: 0.95rem;
   color: #a0aec0;
   margin: 0 0 1.5rem 0;
+}
+
+.footer-social {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd5e0;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.social-link ion-icon {
+  font-size: 1.5rem;
 }
 
 .footer-link {
@@ -582,6 +672,15 @@
   .cta-button {
     width: 100%;
   }
+
+  .contact-buttons {
+    flex-direction: column;
+  }
+
+  .whatsapp-button,
+  .instagram-button {
+    width: 100%;
+  }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
@@ -590,3 +689,5 @@
   }
 }
 
+
+}

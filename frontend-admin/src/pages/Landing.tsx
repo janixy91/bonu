@@ -12,7 +12,9 @@ import {
   peopleOutline,
   checkmarkCircleOutline,
   arrowForwardOutline,
-  qrCodeOutline
+  qrCodeOutline,
+  logoWhatsapp,
+  logoInstagram
 } from 'ionicons/icons';
 import './Landing.css';
 
@@ -21,6 +23,10 @@ const Landing: React.FC = () => {
 
   const handleLogin = () => {
     history.push('/login');
+  };
+
+  const handleRegister = () => {
+    history.push('/register');
   };
 
   return (
@@ -50,7 +56,7 @@ const Landing: React.FC = () => {
             <div className="hero-buttons">
               <IonButton 
                 className="cta-button primary" 
-                onClick={handleLogin}
+                onClick={handleRegister}
               >
                 Unirse al piloto
                 <IonIcon icon={arrowForwardOutline} slot="end" />
@@ -296,7 +302,7 @@ const Landing: React.FC = () => {
             </p>
             <IonButton 
               className="cta-button primary large" 
-              onClick={handleLogin}
+              onClick={handleRegister}
             >
               Unirse al programa piloto
               <IonIcon icon={arrowForwardOutline} slot="end" />
@@ -304,6 +310,28 @@ const Landing: React.FC = () => {
             <p className="cta-note">
               Ya tienes cuenta? <button onClick={handleLogin} className="cta-link">Inicia sesión aquí</button>
             </p>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section className="contact-section">
+          <div className="section-container">
+            <h2 className="section-title">¿Tienes preguntas?</h2>
+            <p className="section-description">
+              Estamos aquí para ayudarte. Contáctanos y te responderemos lo antes posible.
+            </p>
+            <div className="contact-buttons">
+              <IonButton 
+                className="whatsapp-button"
+                href="https://wa.me/1234567890" 
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <IonIcon icon={logoWhatsapp} slot="start" />
+                Hablar por WhatsApp
+              </IonButton>
+            
+            </div>
           </div>
         </section>
 
@@ -321,7 +349,27 @@ const Landing: React.FC = () => {
             <p className="footer-text">
               Sistema de fidelización digital para negocios
             </p>
-            <IonButton fill="clear" onClick={handleLogin} className="footer-link">
+            <div className="footer-social">
+              <a 
+                href="https://wa.me/34663152183?text=Hola%20he%20visto%20BONU%20y%20me%20interesa%20el%20piloto" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-link"
+                aria-label="WhatsApp"
+              >
+                <IonIcon icon={logoWhatsapp} />
+              </a>
+              <a 
+                href="https://instagram.com/getbonu" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-link"
+                aria-label="Instagram"
+              >
+                <IonIcon icon={logoInstagram} />
+              </a>
+            </div>
+            <IonButton fill="clear" onClick={handleRegister} className="footer-link">
               Unirse al piloto
             </IonButton>
           </div>

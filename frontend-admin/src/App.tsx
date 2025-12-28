@@ -6,9 +6,11 @@ import { useAuthStore } from './store/authStore';
 import { apiService } from './services/api.service';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import AdminDashboard from './pages/AdminDashboard';
 import CreateBusiness from './pages/CreateBusiness';
 import BusinessDetails from './pages/BusinessDetails';
+import PilotRegistrations from './pages/PilotRegistrations';
 import BusinessOwnerDashboard from './pages/BusinessOwnerDashboard';
 import GenerateCodes from './pages/GenerateCodes';
 
@@ -53,6 +55,9 @@ function App() {
           <Route exact path="/login">
             {isAuthenticated ? <Redirect to={getDefaultRoute()} /> : <Login />}
           </Route>
+          <Route exact path="/register">
+            <Register />
+          </Route>
           <Route exact path="/admin/dashboard">
             {!isAuthenticated || user?.role !== 'admin' ? (
               <Redirect to="/login" />
@@ -72,6 +77,13 @@ function App() {
               <Redirect to="/login" />
             ) : (
               <BusinessDetails />
+            )}
+          </Route>
+          <Route exact path="/admin/pilot-registrations">
+            {!isAuthenticated || user?.role !== 'admin' ? (
+              <Redirect to="/login" />
+            ) : (
+              <PilotRegistrations />
             )}
           </Route>
           <Route exact path="/business-owner/dashboard">

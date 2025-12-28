@@ -16,7 +16,7 @@ import {
 } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { logOut, add, business } from 'ionicons/icons';
+import { logOut, add, business, people } from 'ionicons/icons';
 import { useAuthStore } from '../store/authStore';
 import { adminService } from '../services/api.service';
 import './AdminDashboard.css';
@@ -79,10 +79,20 @@ const AdminDashboard: React.FC = () => {
         <div className="dashboard-container">
           <div className="dashboard-header">
             <h2>Negocios Registrados</h2>
-                    <IonButton onClick={() => history.push('/admin/create-business')}>
-              <IonIcon icon={add} slot="start" />
-              Nuevo Negocio
-            </IonButton>
+            <div className="dashboard-actions">
+              <IonButton 
+                fill="outline" 
+                onClick={() => history.push('/admin/pilot-registrations')}
+                className="pilot-registrations-button"
+              >
+                <IonIcon icon={people} slot="start" />
+                Solicitudes Piloto
+              </IonButton>
+              <IonButton onClick={() => history.push('/admin/create-business')}>
+                <IonIcon icon={add} slot="start" />
+                Nuevo Negocio
+              </IonButton>
+            </div>
           </div>
 
           {loading ? (
