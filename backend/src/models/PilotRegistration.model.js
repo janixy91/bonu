@@ -12,7 +12,6 @@ const pilotRegistrationSchema = new mongoose.Schema(
       required: true,
       lowercase: true,
       trim: true,
-      index: true,
     },
     contactName: {
       type: String,

@@ -12,7 +12,9 @@ import CreateBusiness from './pages/CreateBusiness';
 import BusinessDetails from './pages/BusinessDetails';
 import PilotRegistrations from './pages/PilotRegistrations';
 import BusinessOwnerDashboard from './pages/BusinessOwnerDashboard';
+import BusinessInfo from './pages/BusinessInfo';
 import GenerateCodes from './pages/GenerateCodes';
+import TapLanding from './pages/TapLanding';
 
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
@@ -93,12 +95,22 @@ function App() {
               <BusinessOwnerDashboard />
             )}
           </Route>
+          <Route exact path="/business-owner/info">
+            {!isAuthenticated || user?.role !== 'business_owner' ? (
+              <Redirect to="/login" />
+            ) : (
+              <BusinessInfo />
+            )}
+          </Route>
           <Route exact path="/business-owner/generate-codes">
             {!isAuthenticated || user?.role !== 'business_owner' ? (
               <Redirect to="/login" />
             ) : (
               <GenerateCodes />
             )}
+          </Route>
+          <Route exact path="/tap">
+            <TapLanding />
           </Route>
           <Route exact path="/">
             <Redirect to="/landing" />

@@ -289,6 +289,7 @@ const PilotRegistrations: React.FC = () => {
         message={successMessage}
         buttons={['OK']}
         cssClass="success-alert"
+        style={{ '--z-index': '9999' } as any}
       />
 
       <IonAlert

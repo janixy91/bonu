@@ -221,7 +221,12 @@ const CreateBusiness: React.FC = () => {
           </form>
 
           {/* Success Modal */}
-          <IonModal isOpen={showSuccessModal} onDidDismiss={handleCloseModal}>
+          <IonModal 
+            isOpen={showSuccessModal} 
+            onDidDismiss={handleCloseModal}
+            cssClass="success-modal"
+            style={{ '--z-index': '9999' } as any}
+          >
             <IonHeader>
               <IonToolbar color="success">
                 <IonTitle>Negocio Creado Exitosamente</IonTitle>

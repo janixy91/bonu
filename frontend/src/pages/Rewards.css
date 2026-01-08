@@ -1,0 +1,154 @@
+.rewards-content {
+  --background: var(--ion-background-color);
+}
+
+.rewards-container {
+  padding: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.points-card {
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+  color: white;
+}
+
+.points-display {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.points-icon {
+  font-size: 3rem;
+  color: var(--ion-color-warning);
+}
+
+.points-info {
+  flex: 1;
+}
+
+.points-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+}
+
+.points-label {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 0.25rem;
+}
+
+.loading-container,
+.empty-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: var(--ion-color-medium);
+  margin-bottom: 1rem;
+}
+
+.empty-card h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ion-text-color);
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-card p {
+  font-size: 1rem;
+  color: var(--ion-color-medium);
+  margin: 0;
+}
+
+.rewards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reward-card {
+  margin-bottom: 0;
+}
+
+.reward-card.disabled {
+  opacity: 0.6;
+}
+
+.reward-card.unavailable {
+  opacity: 0.5;
+}
+
+.reward-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.reward-info {
+  flex: 1;
+}
+
+.reward-info h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ion-text-color);
+  margin: 0 0 0.5rem 0;
+}
+
+.reward-description {
+  font-size: 0.875rem;
+  color: var(--ion-color-medium);
+  margin: 0;
+}
+
+.reward-points {
+  margin-left: 1rem;
+}
+
+.reward-points ion-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+}
+
+.reward-limit {
+  font-size: 0.875rem;
+  color: var(--ion-color-medium);
+  margin-bottom: 1rem;
+}
+
+.redeem-button {
+  margin-top: 0.5rem;
+  --padding-top: 0.875rem;
+  --padding-bottom: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .rewards-container {
+    padding: 0.5rem;
+  }
+
+  .points-icon {
+    font-size: 2.5rem;
+  }
+
+  .points-value {
+    font-size: 2rem;
+  }
+}
+

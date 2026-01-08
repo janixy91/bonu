@@ -1,0 +1,81 @@
+.tap-confirm-content {
+  --background: var(--ion-background-color);
+}
+
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 4rem;
+  color: var(--ion-color-danger);
+  margin-bottom: 1rem;
+}
+
+.tap-confirm-container {
+  padding: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.business-card {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.business-logo {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1rem;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.business-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ion-text-color);
+  margin: 0;
+}
+
+.confirmation-card {
+  margin-top: 2rem;
+}
+
+.confirmation-text {
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--ion-text-color);
+}
+
+.add-stamp-button {
+  margin-top: 1rem;
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .tap-confirm-container {
+    padding: 0.5rem;
+  }
+
+  .business-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .business-name {
+    font-size: 1.3rem;
+  }
+}
+

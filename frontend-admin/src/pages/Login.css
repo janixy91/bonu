@@ -34,6 +34,10 @@
   padding: 2rem;
   position: relative;
   z-index: 1;
+
+  .error-container {
+    min-height: 0;
+  }
 }
 
 .login-card {
@@ -94,11 +98,21 @@
 .error-container {
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.2);
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
   text-align: center;
   animation: shake 0.5s ease-in-out;
+  min-height: auto;
+  height: auto;
+}
+
+.error-container ion-text {
+  display: block;
+  line-height: 1.3;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
 }
 
 @keyframes shake {

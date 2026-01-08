@@ -73,16 +73,37 @@ class ApiService {
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-      const errorMessage = errorData.error || '';
+      let errorData;
+      let errorMessage = '';
+      
+      try {
+        errorData = await response.json();
+        errorMessage = errorData.error || errorData.message || '';
+      } catch (e) {
+        // If response is not JSON, use status text
+        errorMessage = response.statusText || 'Unknown error';
+      }
+      
+      console.error(`[API] Error ${endpoint}:`, {
+        status: response.status,
+        statusText: response.statusText,
+        errorMessage,
+        errorData
+      });
+      
+      // Don't try to refresh token for auth endpoints (login, register, etc.)
+      const isAuthEndpoint = endpoint.startsWith('/auth/login') || 
+                            endpoint.startsWith('/auth/register') ||
+                            endpoint.startsWith('/auth/logout');
       
       // Handle 401 Unauthorized or 403 Forbidden with token expiration
-      const isTokenExpired = response.status === 401 || 
+      const isTokenExpired = !isAuthEndpoint && (
+                            response.status === 401 || 
                             (response.status === 403 && (
                               errorMessage.toLowerCase().includes('token expired') ||
                               errorMessage.toLowerCase().includes('expired') ||
                               errorMessage.toLowerCase().includes('invalid token')
-                            ));
+                            )));
       
       if (isTokenExpired && retryOn401) {
         const refreshed = await this.handleTokenExpiration();
@@ -96,7 +117,14 @@ class ApiService {
         throw error;
       }
 
-      const httpError: any = new Error(errorMessage || `HTTP error! status: ${response.status}`);
+      // For auth endpoints, use the error message from backend
+      // For other endpoints, provide more context
+      const finalErrorMessage = errorMessage || 
+        (response.status === 401 ? 'Credenciales inválidas' : 
+         response.status === 403 ? 'No tienes permisos' :
+         `Error ${response.status}: ${response.statusText}`);
+      
+      const httpError: any = new Error(finalErrorMessage);
       httpError.status = response.status;
       throw httpError;
     }
@@ -319,6 +347,28 @@ class ApiService {
       method: 'POST',
     });
   }
+
+  // Tap/NFC endpoints (public)
+  async createTapIntent(barId: string) {
+    // Public endpoint, no auth headers needed
+    const url = `${API_BASE_URL}/tap?barId=${barId}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      const errorMessage = errorData.error || `HTTP error! status: ${response.status}`;
+      const httpError: any = new Error(errorMessage);
+      httpError.status = response.status;
+      throw httpError;
+    }
+
+    return response.json();
+  }
 }
 
 export const apiService = new ApiService();
@@ -333,6 +383,20 @@ export const adminService = {
   getBusiness: (id: string) => apiService.getBusiness(id),
   updateBusiness: (id: string, data: any) => apiService.updateBusiness(id, data),
   deleteBusiness: (id: string) => apiService.deleteBusiness(id),
+  getBusinessCheckIns: (businessId: string, params?: { limit?: number; offset?: number; startDate?: string; endDate?: string }) => {
+    const queryParams = new URLSearchParams();
+    if (params?.limit) queryParams.append('limit', params.limit.toString());
+    if (params?.offset) queryParams.append('offset', params.offset.toString());
+    if (params?.startDate) queryParams.append('startDate', params.startDate);
+    if (params?.endDate) queryParams.append('endDate', params.endDate);
+    const query = queryParams.toString();
+    return apiService.request<{ checkIns: any[]; total: number; limit: number; offset: number }>(
+      `/admin/businesses/${businessId}/checkins${query ? `?${query}` : ''}`
+    );
+  },
+  getBusinessStats: (businessId: string) => 
+    apiService.request<{ business: any; stats: any; topCustomers: any[] }>(`/admin/businesses/${businessId}/stats`),
+  // Legacy promo card methods - kept for backward compatibility but not used
   createPromoCard: (data: any) => apiService.createPromoCard(data),
   getPromoCard: (cardId: string) => apiService.getPromoCard(cardId),
   updatePromoCard: (cardId: string, data: any) => apiService.updatePromoCard(cardId, data),
@@ -343,6 +407,9 @@ export const adminService = {
 export const businessOwnerService = {
   getMyBusiness: () => apiService.getMyBusiness(),
   updateMyBusiness: (data: any) => apiService.updateMyBusiness(data),
+  getBusinessStats: (businessId: string) => 
+    apiService.request<{ business: any; stats: any; topCustomers: any[] }>(`/business/${businessId}/stats`),
+  // Legacy tarjeta methods - kept for backward compatibility but not used
   getTarjetas: () => apiService.request<{ tarjetas: any[] }>('/business-owner/tarjetas'),
   getTarjeta: (id: string) => apiService.request<{ tarjeta: any }>(`/business-owner/tarjetas/${id}`),
   createTarjeta: (data: any) => apiService.request<{ message: string; tarjeta: any }>('/business-owner/tarjetas', {
@@ -381,5 +448,9 @@ export const adminPilotService = {
     apiService.getPilotRegistrations(status),
   approvePilotRegistration: (registrationId: string) => 
     apiService.approvePilotRegistration(registrationId),
+};
+
+export const tapService = {
+  createTapIntent: (barId: string) => apiService.createTapIntent(barId),
 };
 

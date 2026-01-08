@@ -62,3 +62,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Global fix for alert z-index issues - only adjust z-index */
+.ion-overlay-wrapper.sc-ion-alert-md {
+  z-index: 9999 !important;
+}
+
+.alert-wrapper.ion-overlay-wrapper.sc-ion-alert-md {
+  z-index: 10000 !important;
+}
+
+/* Ensure backdrop is below the alert wrapper */
+.ion-overlay-wrapper.sc-ion-alert-md ion-backdrop {
+  z-index: 9998 !important;
+}
+

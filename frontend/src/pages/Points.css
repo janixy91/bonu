@@ -1,0 +1,131 @@
+.points-content {
+  --background: var(--ion-background-color);
+}
+
+.loading-container,
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: var(--ion-color-medium);
+  margin-bottom: 1rem;
+}
+
+.empty-container h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ion-text-color);
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-container p {
+  font-size: 1rem;
+  color: var(--ion-color-medium);
+  margin: 0 0 2rem 0;
+}
+
+.points-container {
+  padding: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.point-card {
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.point-card:active {
+  transform: scale(0.98);
+}
+
+.point-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.business-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: var(--ion-color-light);
+}
+
+.point-card-info {
+  flex: 1;
+}
+
+.point-card-info h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--ion-text-color);
+  margin: 0 0 0.25rem 0;
+}
+
+.last-checkin {
+  font-size: 0.875rem;
+  color: var(--ion-color-medium);
+  margin: 0;
+}
+
+.point-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ion-color-light);
+}
+
+.points-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.star-icon {
+  font-size: 1.5rem;
+  color: var(--ion-color-warning);
+}
+
+.points-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ion-text-color);
+}
+
+.points-label {
+  font-size: 1rem;
+  color: var(--ion-color-medium);
+}
+
+.checkin-count {
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .points-container {
+    padding: 0.5rem;
+  }
+
+  .business-logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .point-card-info h3 {
+    font-size: 1.1rem;
+  }
+}
+

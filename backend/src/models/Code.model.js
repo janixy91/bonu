@@ -56,10 +56,9 @@ const codeSchema = new mongoose.Schema(
 );
 
 // Index for faster lookups
-codeSchema.index({ code: 1 });
+// Note: 'code' and 'id' already have unique indexes from unique: true in schema
 codeSchema.index({ businessId: 1 });
 codeSchema.index({ userId: 1 });
-codeSchema.index({ id: 1 });
 
 export default mongoose.model('Code', codeSchema);
 

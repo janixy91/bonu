@@ -138,6 +138,35 @@
   --background: var(--ion-color-success-tint);
 }
 
+/* Fix z-index for alert overlay wrapper - only adjust z-index, don't change positioning */
+.ion-overlay-wrapper.sc-ion-alert-md {
+  z-index: 9999 !important;
+}
+
+.alert-wrapper.ion-overlay-wrapper.sc-ion-alert-md {
+  z-index: 10000 !important;
+}
+
+/* Ensure backdrop is below the alert wrapper */
+.ion-overlay-wrapper.sc-ion-alert-md ion-backdrop {
+  z-index: 9998 !important;
+}
+
+.alert-wrapper.ion-overlay-wrapper.sc-ion-alert-md ~ ion-backdrop,
+.ion-overlay-wrapper.sc-ion-alert-md ion-backdrop {
+  z-index: 9998 !important;
+}
+
+/* Ensure alert appears above everything */
+ion-alert.success-alert {
+  z-index: 9999 !important;
+}
+
+ion-alert.success-alert .alert-wrapper {
+  z-index: 10000 !important;
+  position: relative !important;
+}
+
 .error-alert {
   --background: var(--ion-color-danger-tint);
 }

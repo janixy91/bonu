@@ -1,5 +1,7 @@
 .details-container {
-  padding: 1rem;
+  padding: var(--spacing-sm);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .loading-container,
@@ -8,7 +10,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 4rem 2rem;
   min-height: 50vh;
 }
 
@@ -16,66 +18,97 @@
 .error-container {
   margin-top: 1rem;
   text-align: center;
+  color: var(--ion-color-medium);
 }
 
 .business-info-card {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  background: white;
+}
+
+.business-info-card ion-card-content {
+  padding: var(--spacing-md);
 }
 
 .business-info-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .section-title {
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #8B6F47;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ion-color-dark);
   margin: 0;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #8B6F47;
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--ion-color-light);
 }
 
 .edit-button {
-  --color: #8B6F47;
-  --border-color: #8B6F47;
+  --color: var(--ion-color-primary);
+  --border-color: var(--ion-color-primary);
+  --border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+  --background: rgba(139, 111, 71, 0.05);
 }
 
 .business-info-view {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--spacing-md);
 }
 
 .info-row {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
+  padding: var(--spacing-sm);
+  background: var(--ion-color-light);
+  border-radius: var(--radius-md);
 }
 
 .info-label {
-  font-weight: bold;
-  color: #8B6F47;
+  font-weight: 600;
+  color: var(--ion-color-primary);
   font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .info-value {
   color: var(--ion-color-dark);
   word-break: break-word;
+  font-size: 1rem;
 }
 
 .info-value a {
   color: var(--ion-color-primary);
   text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.info-value a:hover {
+  color: var(--ion-color-secondary);
 }
 
 .logo-row {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--ion-color-light);
+  border-radius: var(--radius-md);
 }
 
 .business-logo {
@@ -83,21 +116,24 @@
   max-height: 200px;
   width: auto;
   height: auto;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   object-fit: contain;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .form-actions {
   display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
   align-items: center;
   justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
 .form-actions ion-button {
-  height: 44px;
+  height: 50px;
+  --border-radius: var(--radius-md);
+  font-weight: 600;
   margin: 0;
   min-width: 140px;
 }

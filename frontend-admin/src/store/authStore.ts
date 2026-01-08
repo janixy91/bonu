@@ -19,18 +19,26 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       token: null,
       isAuthenticated: false,
 
       login: async (email: string, password: string) => {
+        console.log('[AuthStore] Login called');
         const response = await authService.login(email, password);
+        console.log('[AuthStore] Login response:', response);
+        console.log('[AuthStore] User from response:', response.user);
+        console.log('[AuthStore] User role:', response.user?.role);
         set({
           user: response.user,
           token: response.token,
           isAuthenticated: true,
         });
+        const state = get();
+        console.log('[AuthStore] State after set:', state);
+        console.log('[AuthStore] User in state:', state.user);
+        console.log('[AuthStore] User role in state:', state.user?.role);
       },
 
       logout: () => {

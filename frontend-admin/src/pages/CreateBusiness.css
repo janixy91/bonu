@@ -51,8 +51,23 @@
 }
 
 /* Success Modal Styles */
+.success-modal {
+  --z-index: 9999 !important;
+  z-index: 9999 !important;
+}
+
+.success-modal ion-modal {
+  --z-index: 9999 !important;
+  z-index: 9999 !important;
+}
+
+.success-modal .modal-wrapper {
+  z-index: 9999 !important;
+}
+
 .modal-content {
   --background: var(--ion-color-light);
+  z-index: 10000 !important;
 }
 
 .success-modal-container {

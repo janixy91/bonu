@@ -61,15 +61,34 @@ export const login = async (req, res) => {
   try {
     const { email, password, deviceId } = req.body;
 
+    console.log('[Login] Attempting login:', {
+      email: email?.toLowerCase().trim(),
+      passwordLength: password?.length,
+      passwordPreview: password ? password.substring(0, 4) + '...' : 'none'
+    });
+
     // Find user
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    const normalizedEmail = email.toLowerCase().trim();
+    const user = await User.findOne({ email: normalizedEmail });
+    
     if (!user) {
+      console.log('[Login] User not found for email:', normalizedEmail);
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
+    console.log('[Login] User found:', {
+      id: user._id,
+      email: user.email,
+      role: user.role,
+      name: user.name
+    });
+
     // Check password
     const isPasswordValid = await user.comparePassword(password);
+    console.log('[Login] Password validation result:', isPasswordValid);
+    
     if (!isPasswordValid) {
+      console.log('[Login] Invalid password for user:', normalizedEmail);
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 

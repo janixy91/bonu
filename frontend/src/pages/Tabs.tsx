@@ -6,29 +6,34 @@ import {
   IonLabel,
   IonRouterOutlet,
 } from '@ionic/react';
-import { wallet, search, ticketOutline } from 'ionicons/icons';
+import { star, locationOutline, giftOutline, personOutline } from 'ionicons/icons';
 import { Route, Redirect } from 'react-router-dom';
+import { useAuthStore } from '../store/authStore';
 import Home from './Home';
-import Explore from './Explore';
-import RedeemCode from './RedeemCode';
+import Points from './Points';
+import CheckIn from './CheckIn';
 import Profile from './Profile';
 import Menu from '../components/Menu';
 import './Tabs.css';
 
 const Tabs: React.FC = () => {
+  const user = useAuthStore((state) => state.user);
+  // Use user ID as key to force remount when user changes (important after logout/login)
+  const userKey = user?.id || 'no-user';
+  
   return (
     <>
       <Menu />
       <IonTabs className="custom-tabs">
         <IonRouterOutlet id="main-content">
-          <Route exact path="/tabs/home">
+          <Route exact path="/tabs/home" key={`home-${userKey}`}>
             <Home />
           </Route>
-          <Route exact path="/tabs/explore">
-            <Explore />
+          <Route exact path="/tabs/points">
+            <Points />
           </Route>
-          <Route exact path="/tabs/redeem">
-            <RedeemCode />
+          <Route exact path="/tabs/checkin">
+            <CheckIn />
           </Route>
           <Route exact path="/tabs/profile">
             <Profile />
@@ -40,20 +45,20 @@ const Tabs: React.FC = () => {
 
         <IonTabBar slot="bottom" className="custom-tab-bar">
           <IonTabButton tab="home" href="/tabs/home" className="tab-button-side">
-            <IonIcon icon={wallet} />
-            <IonLabel>Colección</IonLabel>
+            <IonIcon icon={giftOutline} />
+            <IonLabel>Inicio</IonLabel>
           </IonTabButton>
 
-          <IonTabButton tab="redeem" href="/tabs/redeem" className="tab-button-center">
+          <IonTabButton tab="points" href="/tabs/points" className="tab-button-side">
+            <IonIcon icon={star} />
+            <IonLabel>Puntos</IonLabel>
+          </IonTabButton>
+
+          <IonTabButton tab="checkin" href="/tabs/checkin" className="tab-button-center">
             <div className="center-button-wrapper">
-              <IonIcon icon={ticketOutline} />
-              <IonLabel>Canjear Sellos</IonLabel>
+              <IonIcon icon={locationOutline} />
+              <IonLabel>Check-in</IonLabel>
             </div>
-          </IonTabButton>
-
-          <IonTabButton tab="explore" href="/tabs/explore" className="tab-button-side">
-            <IonIcon icon={search} />
-            <IonLabel>Explorar</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>

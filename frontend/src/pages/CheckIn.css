@@ -1,0 +1,62 @@
+.checkin-content {
+  --background: var(--ion-background-color);
+}
+
+.checkin-container {
+  padding: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.info-card {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.info-icon {
+  font-size: 3rem;
+  color: var(--ion-color-primary);
+  margin-bottom: 1rem;
+}
+
+.info-card h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ion-text-color);
+  margin: 0 0 0.5rem 0;
+}
+
+.info-card p {
+  font-size: 1rem;
+  color: var(--ion-color-medium);
+  margin: 0;
+}
+
+.code-card {
+  margin-top: 1rem;
+}
+
+.code-input-item {
+  --background: var(--ion-color-light);
+  --border-radius: 12px;
+  margin-bottom: 1rem;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+}
+
+.checkin-button {
+  margin-top: 1rem;
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .checkin-container {
+    padding: 0.5rem;
+  }
+}
+

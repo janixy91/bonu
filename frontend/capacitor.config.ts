@@ -13,6 +13,11 @@ const config: CapacitorConfig = {
         camera: 'This app uses your camera to scan QR codes',
       },
     },
+    App: {
+      // Deep link configuration
+      // iOS: Configure in Xcode project settings
+      // Android: Configure in AndroidManifest.xml (auto-generated)
+    },
   },
 };
 

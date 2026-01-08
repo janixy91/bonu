@@ -49,10 +49,14 @@ const Register: React.FC = () => {
 
     try {
       await register(email, password, name);
-      // Small delay to ensure state is persisted
-      setTimeout(() => {
-        window.location.href = '/tabs/home';
-      }, 100);
+      
+      // Small delay to ensure React state updates propagate
+      // The API service now reads directly from Zustand store, so this is just for React rendering
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Use history.push instead of window.location.href to avoid page reload
+      // This preserves the React state and prevents logout issues
+      history.push('/tabs/home');
     } catch (err: any) {
       setError(err.message || 'Error al registrarse');
       setLoading(false);

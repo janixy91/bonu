@@ -1,0 +1,204 @@
+.details-container {
+  padding: var(--spacing-sm);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.business-info-card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-md);
+  overflow: hidden;
+  background: white;
+}
+
+.business-info-card ion-card-content {
+  padding: var(--spacing-md);
+}
+
+.business-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-title ion-icon {
+  color: var(--ion-color-primary);
+  font-size: 1.75rem;
+}
+
+.business-info-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: var(--spacing-sm);
+  background: var(--ion-color-light);
+  border-radius: var(--radius-md);
+}
+
+.info-label {
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  color: var(--ion-color-dark);
+  word-break: break-word;
+  font-size: 1rem;
+}
+
+.info-value a {
+  color: var(--ion-color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.info-value a:hover {
+  color: var(--ion-color-secondary);
+}
+
+.logo-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--ion-color-light);
+  border-radius: var(--radius-md);
+}
+
+.business-logo {
+  max-width: 200px;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-md);
+  object-fit: contain;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.form-actions ion-button {
+  height: 50px;
+  --border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+.edit-button {
+  --color: var(--ion-color-primary);
+  --border-color: var(--ion-color-primary);
+  --border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+  --background: rgba(139, 111, 71, 0.05);
+}
+
+.submit-button {
+  --background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+  --background-activated: var(--ion-color-primary-shade);
+  --border-radius: var(--radius-md);
+  height: 50px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  background: linear-gradient(135deg, rgba(107, 142, 90, 0.1) 0%, rgba(107, 142, 90, 0.05) 100%);
+  border-radius: var(--radius-md);
+  color: var(--ion-color-success);
+  font-weight: 500;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  background: rgba(231, 111, 81, 0.1);
+  border-radius: var(--radius-md);
+  color: var(--ion-color-danger);
+  font-weight: 500;
+}
+
+.logout-button {
+  --color: white !important;
+  color: white !important;
+  font-weight: 500;
+  margin-right: 0.5rem;
+  --background: transparent;
+  --background-activated: rgba(255, 255, 255, 0.2);
+  opacity: 1 !important;
+}
+
+.logout-button ion-icon {
+  color: white !important;
+  margin-right: 0.25rem;
+}
+
+.business-title {
+  padding-left: 1rem;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  min-height: 50vh;
+}
+
+.loading-container p {
+  margin-top: 1rem;
+  color: var(--ion-color-medium);
+  font-size: 1rem;
+}
+

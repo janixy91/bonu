@@ -1,6 +1,8 @@
 import Business from '../models/Business.model.js';
 import User from '../models/User.model.js';
 import PromoCard from '../models/PromoCard.model.js';
+import CheckIn from '../models/CheckIn.model.js';
+import UserPoints from '../models/UserPoints.model.js';
 import { sendEmail } from '../services/email.service.js';
 
 /**
@@ -244,6 +246,150 @@ export const deleteBusiness = async (req, res) => {
   } catch (error) {
     console.error('Delete business error:', error);
     res.status(500).json({ error: 'Failed to delete business' });
+  }
+};
+
+/**
+ * GET /admin/businesses/:id/checkins
+ * Get check-ins for a business (admin only)
+ * Query: limit, offset, startDate, endDate
+ */
+export const getBusinessCheckIns = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { limit = 50, offset = 0, startDate, endDate } = req.query;
+
+    const business = await Business.findById(id);
+    if (!business) {
+      return res.status(404).json({ error: 'Business not found' });
+    }
+
+    const query = { businessId: id };
+    if (startDate || endDate) {
+      query.createdAt = {};
+      if (startDate) query.createdAt.$gte = new Date(startDate);
+      if (endDate) query.createdAt.$lte = new Date(endDate);
+    }
+
+    const checkIns = await CheckIn.find(query)
+      .populate('userId', 'name email')
+      .sort({ createdAt: -1 })
+      .limit(parseInt(limit))
+      .skip(parseInt(offset));
+
+    const total = await CheckIn.countDocuments(query);
+
+    res.json({
+      checkIns: checkIns.map((ci) => ({
+        id: ci._id,
+        userId: ci.userId._id,
+        userName: ci.userId.name,
+        userEmail: ci.userId.email,
+        points: ci.points,
+        method: ci.method,
+        bonusReason: ci.bonusReason,
+        notes: ci.notes,
+        createdAt: ci.createdAt,
+      })),
+      total,
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
+  } catch (error) {
+    console.error('Get business check-ins error:', error);
+    res.status(500).json({ error: 'Failed to get check-ins' });
+  }
+};
+
+/**
+ * GET /admin/businesses/:id/stats
+ * Get statistics for a business (admin only)
+ */
+export const getBusinessStats = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const business = await Business.findById(id);
+    if (!business) {
+      return res.status(404).json({ error: 'Business not found' });
+    }
+
+    // Total check-ins
+    const totalCheckIns = await CheckIn.countDocuments({ businessId: id });
+
+    // Total unique customers
+    const totalCustomers = await UserPoints.countDocuments({ businessId: id });
+
+    // Total points given
+    const totalPointsResult = await CheckIn.aggregate([
+      { $match: { businessId: id } },
+      { $group: { _id: null, total: { $sum: '$points' } } },
+    ]);
+    const totalPoints = totalPointsResult[0]?.total || 0;
+
+    // Check-ins in last 30 days
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const recentCheckIns = await CheckIn.countDocuments({
+      businessId: id,
+      createdAt: { $gte: thirtyDaysAgo },
+    });
+
+    // Check-ins by day (last 7 days)
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const checkInsByDay = await CheckIn.aggregate([
+      {
+        $match: {
+          businessId: id,
+          createdAt: { $gte: sevenDaysAgo },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+
+    // Top customers by points
+    const topCustomers = await UserPoints.find({ businessId: id })
+      .populate('userId', 'name email')
+      .sort({ totalPoints: -1 })
+      .limit(10)
+      .lean();
+
+    res.json({
+      business: {
+        id: business._id,
+        name: business.name,
+      },
+      stats: {
+        totalCheckIns,
+        totalCustomers,
+        totalPoints,
+        recentCheckIns,
+        checkInsByDay: checkInsByDay.map((day) => ({
+          date: day._id,
+          count: day.count,
+        })),
+      },
+      topCustomers: topCustomers.map((tc) => ({
+        userId: tc.userId._id,
+        userName: tc.userId.name,
+        userEmail: tc.userId.email,
+        totalPoints: tc.totalPoints,
+        checkInCount: tc.checkInCount,
+        lastCheckIn: tc.lastCheckIn,
+      })),
+    });
+  } catch (error) {
+    console.error('Get business stats error:', error);
+    res.status(500).json({ error: 'Failed to get business stats' });
   }
 };
 

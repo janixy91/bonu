@@ -7,130 +7,312 @@ import {
   IonCard,
   IonCardContent,
   IonSkeletonText,
-  IonImg,
   IonRefresher,
   IonRefresherContent,
-  RefresherEventDetail,
   IonButtons,
   IonButton,
   IonIcon,
   IonMenuButton,
+  IonSpinner,
 } from '@ionic/react';
-import { useEffect, useState } from 'react';
+import { star, locationOutline, giftOutline } from 'ionicons/icons';
+import { useEffect, useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useIonViewWillEnter } from '@ionic/react';
 import { useAuthStore } from '../store/authStore';
-import { tarjetaClienteService } from '../services/api.service';
-import StampCard from '../components/StampCard';
+import { pointsService } from '../services/api.service';
 import './Home.css';
 
 const Home: React.FC = () => {
-  const [cards, setCards] = useState<any[]>([]);
+  const [points, setPoints] = useState<Array<{
+    business: {
+      id: string;
+      name: string;
+      logoUrl: string | null;
+    };
+    totalPoints: number;
+    checkInCount: number;
+    lastCheckIn: string | null;
+  }>>([]);
   const [loading, setLoading] = useState(true);
   const history = useHistory();
   const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  useEffect(() => {
-    loadCards();
-  }, []);
-
-  // Listen for card added event
-  useEffect(() => {
-    const handleCardAdded = () => {
-      loadCards();
-    };
-
-    window.addEventListener('cardAdded', handleCardAdded);
-    return () => {
-      window.removeEventListener('cardAdded', handleCardAdded);
-    };
-  }, []);
-
-  const loadCards = async () => {
+  const loadPoints = useCallback(async () => {
     try {
+      console.log('[Home] Loading points...');
       setLoading(true);
-      const response = await tarjetaClienteService.getMisTarjetas();
-      // Transform the response to match the expected format
-      setCards((response.tarjetas || []).map(tarjeta => ({
-        _id: tarjeta.tarjetaClienteId,
-        businessId: {
-          _id: tarjeta.comercio?._id || tarjeta.comercio?.id,
-          name: tarjeta.comercio?.name,
-          logoUrl: tarjeta.comercio?.logoUrl,
-        },
-        currentStamps: tarjeta.sellosActuales || 0,
-        totalStamps: tarjeta.totalStamps || 10,
-        rewardText: tarjeta.valorRecompensa,
-        nombre: tarjeta.nombre,
-        estado: tarjeta.estadoCliente,
-      })));
-    } catch (error) {
-      console.error('Error loading cards:', error);
+      const data = await pointsService.getUserPoints();
+      console.log('[Home] Points loaded:', data.points?.length || 0);
+      setPoints(data.points || []);
+    } catch (err: any) {
+      console.error('[Home] Error loading points:', err);
+      // Don't show error to user if it's just a loading issue
+      // The error is already logged for debugging
+      if (err.status === 401 || err.status === 403) {
+        // Authentication error - this will be handled by the API service
+        // Don't set points, but don't crash the app either
+        setPoints([]);
+      } else {
+        // For other errors, still set empty array to prevent crashes
+        setPoints([]);
+      }
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  // Track previous user ID to detect user changes (important after logout/login)
+  const [previousUserId, setPreviousUserId] = useState<string | undefined>(user?.id);
+  
+  // Reset state when user changes (important after logout/login)
+  useEffect(() => {
+    const currentUserId = user?.id;
+    console.log('[Home] Auth state changed:', { 
+      isAuthenticated, 
+      userId: currentUserId,
+      previousUserId,
+      userChanged: currentUserId !== previousUserId
+    });
+    
+    // If user changed or logged out, reset state
+    if (currentUserId !== previousUserId) {
+      console.log('[Home] User changed or logged out, resetting state');
+      setPoints([]);
+      setLoading(true); // Set to true so we show loading state
+      setPreviousUserId(currentUserId);
+    }
+    
+    if (!isAuthenticated || !user?.id) {
+      // Reset state when logged out
+      console.log('[Home] Not authenticated, resetting state');
+      setPoints([]);
+      setLoading(false);
+    }
+  }, [isAuthenticated, user?.id, previousUserId]);
+
+  // Use Ionic lifecycle hook to ensure component is ready when view enters
+  useIonViewWillEnter(() => {
+    console.log('[Home] useIonViewWillEnter triggered:', { isAuthenticated, userId: user?.id });
+    if (isAuthenticated && user?.id) {
+      // Reset loading state and load fresh data
+      setLoading(true);
+      loadPoints();
+    } else {
+      setLoading(false);
+    }
+  });
+
+  // Load points when authenticated and user is available
+  useEffect(() => {
+    console.log('[Home] useEffect triggered:', { isAuthenticated, userId: user?.id });
+    // Only load points if user is authenticated and we have a user ID
+    // This prevents API calls before token is ready after login
+    if (isAuthenticated && user?.id) {
+      // Don't load here - let useIonViewWillEnter handle it
+      // This prevents double loading
+    } else {
+      console.log('[Home] Not authenticated or no user, setting loading to false');
+      setLoading(false);
+    }
+  }, [isAuthenticated, user?.id]);
+
+  const handleRefresh = async (e: CustomEvent) => {
+    try {
+      await loadPoints();
+    } catch (err) {
+      console.error('[Home] Error refreshing points:', err);
+    } finally {
+      (e.target as HTMLIonRefresherElement).complete();
+    }
   };
 
-  const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
-    await loadCards();
-    event.detail.complete();
-  };
+  const totalPoints = points.reduce((sum, p) => sum + (p.totalPoints || 0), 0);
+  const totalCheckIns = points.reduce((sum, p) => sum + (p.checkInCount || 0), 0);
 
+  console.log('[Home] Rendering:', { 
+    loading, 
+    pointsCount: points.length, 
+    hasUser: !!user,
+    userName: user?.name,
+    isAuthenticated,
+    totalPoints,
+    totalCheckIns
+  });
 
+  // Ensure we always render something visible
+  if (!isAuthenticated) {
+    console.log('[Home] Not authenticated, showing loading state');
+    return (
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>BONU</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="home-content">
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <IonSpinner />
+          </div>
+        </IonContent>
+      </IonPage>
+    );
+  }
+
+  console.log('[Home] Rendering JSX...', {
+    willRender: true,
+    hasContent: true,
+    loading,
+    pointsCount: points.length
+  });
+  
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar style={{ '--background': 'rgba(26, 32, 44, 0.98)' }}>
+        <IonToolbar>
           <IonButtons slot="start">
-            <IonMenuButton color="light" />
+            <IonMenuButton />
           </IonButtons>
-          <IonTitle>Mi Colección</IonTitle>
+          <IonTitle>BONU</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen style={{ paddingBottom: '100px' }}>
+      <IonContent 
+        className="home-content" 
+        style={{ 
+          '--background': 'var(--ion-background-color)',
+          opacity: 1,
+          visibility: 'visible',
+          display: 'block',
+          position: 'relative',
+          zIndex: 1
+        } as any}
+      >
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
-          <IonRefresherContent></IonRefresherContent>
+          <IonRefresherContent />
         </IonRefresher>
 
-        <div className="home-container">
+        <div 
+          className="home-container" 
+          style={{ 
+            minHeight: '100%', 
+            padding: '1rem',
+            opacity: 1,
+            visibility: 'visible',
+            display: 'block'
+          }}
+        >
+          {/* Welcome Card */}
+          <IonCard className="welcome-card">
+            <IonCardContent>
+              <h1>¡Hola, {user?.name || 'Usuario'}!</h1>
+              <p>Acumula puntos haciendo check-in en tus bares favoritos</p>
+            </IonCardContent>
+          </IonCard>
+
+          {/* Stats Card */}
+          <IonCard className="stats-card">
+            <IonCardContent>
+              <div className="stats-grid">
+                <div className="stat-item">
+                  <IonIcon icon={star} className="stat-icon" />
+                  <div className="stat-value">{totalPoints}</div>
+                  <div className="stat-label">Puntos totales</div>
+                </div>
+                <div className="stat-item">
+                  <IonIcon icon={locationOutline} className="stat-icon" />
+                  <div className="stat-value">{totalCheckIns}</div>
+                  <div className="stat-label">Check-ins</div>
+                </div>
+                <div className="stat-item">
+                  <IonIcon icon={giftOutline} className="stat-icon" />
+                  <div className="stat-value">{points.length}</div>
+                  <div className="stat-label">Bares</div>
+                </div>
+              </div>
+            </IonCardContent>
+          </IonCard>
+
+          {/* Quick Actions */}
+          <div className="quick-actions">
+            <IonButton
+              expand="block"
+              className="checkin-button"
+              onClick={() => history.push('/tabs/checkin')}
+            >
+              <IonIcon icon={locationOutline} slot="start" />
+              Hacer check-in
+            </IonButton>
+            <IonButton
+              expand="block"
+              fill="outline"
+              className="points-button"
+              onClick={() => history.push('/tabs/points')}
+            >
+              <IonIcon icon={star} slot="start" />
+              Ver mis puntos
+            </IonButton>
+          </div>
+
+          {/* Points by Business */}
           {loading ? (
-            <>
-              {[1, 2, 3].map((i) => (
-                <IonCard key={i}>
+            <div className="loading-container">
+              <IonSkeletonText animated style={{ width: '100%', height: '100px' }} />
+              <IonSkeletonText animated style={{ width: '100%', height: '100px' }} />
+            </div>
+          ) : points.length === 0 ? (
+            <IonCard className="empty-card">
+              <IonCardContent>
+                <IonIcon icon={locationOutline} className="empty-icon" />
+                <h2>No tienes puntos aún</h2>
+                <p>Haz check-in en tus bares favoritos para empezar a acumular puntos</p>
+                <IonButton onClick={() => history.push('/tabs/checkin')}>
+                  Hacer mi primer check-in
+                </IonButton>
+              </IonCardContent>
+            </IonCard>
+          ) : (
+            <div className="points-list">
+              <h2 className="section-title">Tus puntos por bar</h2>
+              {points.slice(0, 5).map((point) => (
+                <IonCard
+                  key={point.business.id}
+                  className="point-card"
+                  onClick={() => history.push(`/business/${point.business.id}`)}
+                >
                   <IonCardContent>
-                    <IonSkeletonText animated style={{ width: '60%', height: '20px' }} />
-                    <IonSkeletonText animated style={{ width: '40%', height: '16px', marginTop: '10px' }} />
+                    <div className="point-card-content">
+                      {point.business.logoUrl && (
+                        <img
+                          src={point.business.logoUrl}
+                          alt={point.business.name}
+                          className="business-logo"
+                        />
+                      )}
+                      <div className="point-card-info">
+                        <h3>{point.business.name}</h3>
+                        <div className="point-card-stats">
+                          <span className="points-badge">
+                            <IonIcon icon={star} />
+                            {point.totalPoints} puntos
+                          </span>
+                          <span className="checkins-badge">{point.checkInCount} check-ins</span>
+                        </div>
+                      </div>
+                    </div>
                   </IonCardContent>
                 </IonCard>
               ))}
-            </>
-          ) : cards.length === 0 ? (
-            <div className="empty-state">
-              <IonImg src="/assets/empty-cards.svg" className="empty-icon" />
-              <h3>No tienes tarjetas aún</h3>
-              <p>Explora los comercios disponibles y añade tu primera tarjeta</p>
+              {points.length > 5 && (
+                <IonButton
+                  expand="block"
+                  fill="clear"
+                  onClick={() => history.push('/tabs/points')}
+                >
+                  Ver todos los puntos
+                </IonButton>
+              )}
             </div>
-          ) : (
-            cards.map((card) => {
-              const business = card.businessId;
-              const totalStamps = card.totalStamps || 10;
-              const currentStamps = card.currentStamps || 0;
-              const isComplete = currentStamps >= totalStamps;
-
-              return (
-                <StampCard
-                  key={card._id}
-                  id={card._id}
-                  businessName={business?.name}
-                  businessLogoUrl={business?.logoUrl}
-                  cardName={card.nombre}
-                  rewardText={card.rewardText || card.valorRecompensa || 'Recompensa'}
-                  totalStamps={totalStamps}
-                  currentStamps={currentStamps}
-                  isComplete={isComplete}
-                  description={card.descripcion}
-                />
-              );
-            })
           )}
         </div>
       </IonContent>
@@ -139,4 +321,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-

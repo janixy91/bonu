@@ -33,17 +33,25 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
+      console.log('[Admin Login] Attempting login...');
       await login(email, password);
       const user = useAuthStore.getState().user;
+      console.log('[Admin Login] Login successful, user:', user);
+      console.log('[Admin Login] User role:', user?.role);
+      
       if (user?.role === 'admin') {
+        console.log('[Admin Login] Redirecting to admin dashboard');
         history.push('/admin/dashboard');
       } else if (user?.role === 'business_owner') {
+        console.log('[Admin Login] Redirecting to business owner dashboard');
         history.push('/business-owner/dashboard');
       } else {
-        setError('No tienes permisos para acceder a este panel');
+        console.warn('[Admin Login] User role not recognized:', user?.role);
+        setError(`No tienes permisos para acceder a este panel. Rol: ${user?.role || 'no definido'}`);
         useAuthStore.getState().logout();
       }
     } catch (err: any) {
+      console.error('[Admin Login] Login error:', err);
       setError(err.message || 'Error al iniciar sesión');
     } finally {
       setLoading(false);

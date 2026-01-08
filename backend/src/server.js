@@ -14,6 +14,11 @@ import codeRoutes from './routes/code.routes.js';
 import promoCardRoutes from './routes/promoCard.routes.js';
 import clienteRoutes from './routes/cliente.routes.js';
 import pilotRoutes from './routes/pilot.routes.js';
+import tapRoutes from './routes/tap.routes.js';
+import checkinRoutes from './routes/checkin.routes.js';
+import pointsRoutes from './routes/points.routes.js';
+import rewardRoutes from './routes/reward.routes.js';
+import businessStatsRoutes from './routes/business-stats.routes.js';
 
 dotenv.config();
 
@@ -38,6 +43,12 @@ app.use('/api/codes', codeRoutes);
 app.use('/api/admin/promo-cards', promoCardRoutes);
 app.use('/api/cliente', clienteRoutes);
 app.use('/api/pilot', pilotRoutes);
+app.use('/api/stamps', stampRoutes);
+app.use('/api', tapRoutes);
+app.use('/api/checkin', checkinRoutes);
+app.use('/api/points', pointsRoutes);
+app.use('/api/rewards', rewardRoutes);
+app.use('/api/business', businessStatsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

@@ -48,8 +48,8 @@ const Landing: React.FC = () => {
             </p>
             <p className="hero-description">
               Únete a nuestro programa piloto y transforma la forma en que fidelizas 
-              a tus clientes.  Tarjetas digitales con recompensas que tus 
-              clientes llevan siempre en el móvil.
+              a tus clientes. Sistema de check-ins y puntos que tus 
+              clientes acumulan cada vez que visitan tu local.
             </p>
         
          
@@ -71,8 +71,8 @@ const Landing: React.FC = () => {
             <h2 className="section-title">¿Qué es BONU?</h2>
             <p className="section-description">
               BONU es una plataforma digital que permite a los negocios crear y gestionar 
-              programas de fidelización modernos. Tus clientes acumulan sellos digitales en 
-              sus móviles y canjean recompensas cuando completan sus tarjetas.
+              programas de fidelización modernos. Tus clientes hacen check-in cada vez que visitan 
+              tu local, acumulan puntos y canjean recompensas cuando alcanzan sus objetivos.
             </p>
           </div>
         </section>
@@ -82,29 +82,28 @@ const Landing: React.FC = () => {
           <div className="section-container">
             <h2 className="section-title">Lo que nos hace especial</h2>
             <p className="section-description">
-              Lo que hace especial a BONU es lo fácil que es validar sellos. Dos formas simples 
-              que no requieren esfuerzo de tus empleados:
+              Lo que hace especial a BONU es lo fácil que es hacer check-in. <strong>Sin esfuerzo para tus empleados:</strong>
             </p>
             <div className="validation-methods">
               <div className="validation-method-card highlight">
                 <div className="method-icon">
-                  <IonIcon icon={qrCodeOutline} />
+                  <IonIcon icon={checkmarkCircleOutline} />
                 </div>
-                <h3 className="method-title">Códigos en papel</h3>
+                <h3 className="method-title">Check-in por NFC</h3>
                 <p className="method-description">
-                  Imprime o solicita códigos y repártelos a tus clientes cuando lo consideres, ¡Tú marcas las reglas!. El cliente introduce 
-                  el código en su móvil tranquilamente. <strong>Tus camareros solo dan un papelito.</strong>
+                  Coloca un cartel NFC en tu barra. <strong>El cliente solo tiene que acercar su móvil al cartel </strong>  
+                   automáticamente hace check-in y gana puntos. <strong>¡Tus camareros no tienen que hacer nada!</strong>
                 </p>
               </div>
 
               <div className="validation-method-card highlight">
                 <div className="method-icon">
-                  <IonIcon icon={checkmarkCircleOutline} />
+                  <IonIcon icon={qrCodeOutline} />
                 </div>
-                <h3 className="method-title">Validación por NFC</h3>
+                <h3 className="method-title">Puntos extras con códigos</h3>
                 <p className="method-description">
-                  Aún más rápido: el camarero acerca su dispositivo NFC al móvil del cliente 
-                  y<strong> con un solo toque valida el sello</strong>. Instantáneo y sin complicaciones.
+                  Genera códigos especiales para repartir puntos extras cuando quieras premiar a tus clientes. 
+                  El cliente introduce el código en su móvil y <strong>recibe puntos adicionales instantáneamente</strong>.
                 </p>
               </div>
             </div>
@@ -129,12 +128,12 @@ const Landing: React.FC = () => {
 
               <div className="feature-card">
                 <div className="feature-icon">
-                  <IonIcon icon={qrCodeOutline} />
+                  <IonIcon icon={checkmarkCircleOutline} />
                 </div>
-                <h3 className="feature-title">Tarjetas digitales</h3>
+                <h3 className="feature-title">Check-ins digitales</h3>
                 <p className="feature-description">
-                  Tus clientes llevan sus tarjetas de fidelización siempre en el móvil. 
-                  Sin necesidad de tarjetas físicas que se pierden o se olvidan
+                  Tus clientes hacen check-in cada vez que visitan tu local desde su móvil. 
+                  Acumulan puntos automáticamente sin necesidad de tarjetas físicas
                 </p>
               </div>
 
@@ -144,8 +143,8 @@ const Landing: React.FC = () => {
                 </div>
                 <h3 className="feature-title">Control total</h3>
                 <p className="feature-description">
-                  Configura cuántos sellos necesitas, qué recompensas ofreces y gestiona 
-                  todo desde un panel intuitivo
+                  Configura cuántos puntos otorgas por check-in, qué recompensas ofreces y gestiona 
+                  todo desde un panel intuitivo con estadísticas en tiempo real
                 </p>
               </div>
 
@@ -206,7 +205,7 @@ const Landing: React.FC = () => {
                 <div className="step-number">2</div>
                 <h3 className="step-title">Configuras tu programa</h3>
                 <p className="step-description">
-                  Define cuántos sellos necesitas, cuales son las reglas para obtenerlos y qué recompensa ofreces
+                  Define cuántos puntos otorgas por check-in, qué recompensas ofreces y cuántos puntos necesitan para canjearlas
                 </p>
               </div>
 
@@ -218,7 +217,7 @@ const Landing: React.FC = () => {
                 <div className="step-number">3</div>
                 <h3 className="step-title">Tus clientes se unen</h3>
                 <p className="step-description">
-                  Los clientes descargan la app y añaden tu tarjeta de fidelización
+                  Los clientes descargan la app y encuentran tu negocio para empezar a acumular puntos
                 </p>
               </div>
 
@@ -228,9 +227,10 @@ const Landing: React.FC = () => {
 
               <div className="step highlight-step">
                 <div className="step-number">4</div>
-                <h3 className="step-title">Validas sellos fácilmente</h3>
+                <h3 className="step-title">Check-ins automáticos</h3>
                 <p className="step-description">
-                  Reparte un código en papel o valida por NFC con un solo toque. <strong>Sin complicaciones para tus camareros.</strong>
+                  El cliente acerca su móvil al cartel NFC en tu barra y <strong>hace check-in automáticamente</strong>. 
+                  Sin intervención de tus empleados. También puedes repartir códigos para puntos extras cuando quieras.
                 </p>
               </div>
 
@@ -242,7 +242,7 @@ const Landing: React.FC = () => {
                 <div className="step-number">5</div>
                 <h3 className="step-title">Entregas recompensas</h3>
                 <p className="step-description">
-                  Cuando completan su tarjeta, entregas la recompensa y ellos vuelven por más
+                  Cuando acumulan suficientes puntos, entregas la recompensa y ellos vuelven por más
                 </p>
               </div>
             </div>
@@ -265,11 +265,11 @@ const Landing: React.FC = () => {
                 </li>
                 <li>
                   <IonIcon icon={checkmarkCircleOutline} className="benefit-icon" />
-                  <span>Códigos impresos gratis para repartir a tus clientes</span>
+                  <span>Cartel NFC gratis para colocar en tu barra - los clientes hacen check-in automáticamente</span>
                 </li>
                 <li>
                   <IonIcon icon={checkmarkCircleOutline} className="benefit-icon" />
-                  <span>Dispositivos NFC gratis para validar sellos con un solo toque</span>
+                  <span>Códigos impresos gratis para repartir puntos extras cuando quieras</span>
                 </li>
                 <li>
                   <IonIcon icon={checkmarkCircleOutline} className="benefit-icon" />
@@ -307,9 +307,9 @@ const Landing: React.FC = () => {
               Unirse al programa piloto
               <IonIcon icon={arrowForwardOutline} slot="end" />
             </IonButton>
-            <p className="cta-note">
+            {/* <p className="cta-note">
               Ya tienes cuenta? <button onClick={handleLogin} className="cta-link">Inicia sesión aquí</button>
-            </p>
+            </p> */}
           </div>
         </section>
 

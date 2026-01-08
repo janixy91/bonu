@@ -9,7 +9,7 @@ import {
   useIonViewWillEnter,
 } from '@ionic/react';
 import { useState, useRef } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import './Login.css';
 
@@ -18,9 +18,15 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const location = useLocation();
   const login = useAuthStore((state) => state.login);
   const contentRef = useRef<HTMLIonContentElement>(null);
+
+  // Get redirect URL from query params
+  const getRedirectUrl = () => {
+    const params = new URLSearchParams(location.search);
+    return params.get('redirect') || '/tabs/home';
+  };
 
   // Scroll to top when view enters
   useIonViewWillEnter(() => {
@@ -33,12 +39,50 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
+      console.log('[Login] Starting login...');
       await login(email, password);
-      // Small delay to ensure state is persisted
-      setTimeout(() => {
-        window.location.href = '/tabs/home';
-      }, 100);
+      console.log('[Login] Login successful, checking auth state...');
+      
+      // Wait for Zustand to persist state to localStorage
+      // Check that token is actually saved before navigating
+      let attempts = 0;
+      const maxAttempts = 20;
+      while (attempts < maxAttempts) {
+        const stored = localStorage.getItem('bonu-auth-storage');
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored);
+            if (parsed.state?.accessToken && parsed.state?.isAuthenticated) {
+              console.log('[Login] Token confirmed in localStorage, safe to navigate');
+              break; // Token is saved, safe to navigate
+            }
+          } catch (e) {
+            // Continue waiting
+          }
+        }
+        await new Promise(resolve => setTimeout(resolve, 50));
+        attempts++;
+      }
+      
+      // Also verify the store state is updated
+      const currentState = useAuthStore.getState();
+      console.log('[Login] Final state check:', {
+        isAuthenticated: currentState.isAuthenticated,
+        hasAccessToken: !!currentState.accessToken,
+        hasUser: !!currentState.user
+      });
+      
+      // After logout/login, force a full page reload to ensure clean state
+      // This prevents issues with IonRouterOutlet and IonTabs not properly remounting
+      const redirectUrl = getRedirectUrl();
+      console.log('[Login] Navigating to:', redirectUrl);
+      console.log('[Login] Forcing full page reload to ensure clean state...');
+      
+      // Use window.location.href to force a complete page reload
+      // This ensures all components remount cleanly after logout/login
+      window.location.href = redirectUrl;
     } catch (err: any) {
+      console.error('[Login] Login error:', err);
       setError(err.message || 'Error al iniciar sesión');
       setLoading(false);
     }
